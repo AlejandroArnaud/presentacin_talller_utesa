@@ -11,3 +11,6 @@ Thumbs.db
 # temporales
 *.tmp
 *.log
+
+# superpowers (companion de brainstorm, sesiones locales)
+.superpowers/
