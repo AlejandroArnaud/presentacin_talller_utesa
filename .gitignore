@@ -1,0 +1,13 @@
+# gstack (sesiones locales, no versionar)
+.gstack/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+.vscode/
+.idea/
+
+# temporales
+*.tmp
+*.log
