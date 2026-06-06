@@ -157,6 +157,11 @@
   .card.coral{ border-color: rgba(255,77,109,0.35); }
   .card.mint { border-color: rgba(62,230,168,0.35); }
 
+  /* Token chips (slide "El token") */
+  .tok{ display:inline-block; font-family:var(--mono); font-size:25px; padding:7px 13px; border-radius:9px;
+        background:rgba(0,229,255,0.08); border:1px solid rgba(0,229,255,0.24); color:var(--ink); }
+  .tok.alt{ background:rgba(62,230,168,0.08); border-color:rgba(62,230,168,0.28); }
+
   /* Constellation canvas — full-bleed background animation */
   .constellation{ position:absolute; inset:0; z-index:1; }
   .scanlines{
@@ -584,9 +589,9 @@
 </section>
 
 <!-- ============================================================ -->
-<!-- 06 — LOS LLM MÁS USADOS -->
+<!-- 06 — EL TOKEN -->
 <!-- ============================================================ -->
-<section data-label="06 LLM más usados">
+<section data-label="06 El token">
   <div class="progress"><span class="done"></span><span class="active"></span><span></span><span></span><span></span></div>
   <div class="chrome">
     <div class="chrome-top">
@@ -599,8 +604,74 @@
     </div>
   </div>
   <div class="frame top">
+    <div class="anim-fade" style="font-family:var(--mono); font-size:24px; color:var(--cyan); letter-spacing:.16em; margin-bottom:14px;">LA UNIDAD MÍNIMA</div>
+    <h2 class="h2 anim-fade-d1">El <span class="cyan">token</span>: así "lee" la IA.</h2>
+    <div style="display:grid; grid-template-columns:1.02fr 1fr; gap:56px; margin-top:44px; align-items:start;">
+      <!-- IZQUIERDA: qué es + ejemplo tokenizado -->
+      <div>
+        <p class="body anim-fade-d2">La IA no procesa letras ni palabras enteras: parte el texto en <b>tokens</b>, piezas de ~<b>4 caracteres</b> (≈ ¾ de una palabra).</p>
+        <div class="anim-fade-d3" style="margin-top:26px; display:flex; flex-wrap:wrap; gap:9px;">
+          <span class="tok">La</span>
+          <span class="tok alt">intelig</span>
+          <span class="tok">encia</span>
+          <span class="tok alt">artificial</span>
+          <span class="tok">transform</span>
+          <span class="tok alt">ará</span>
+          <span class="tok">la</span>
+          <span class="tok alt">educa</span>
+          <span class="tok">ción</span>
+          <span class="tok alt">.</span>
+        </div>
+        <p class="small anim-fade-d3" style="margin-top:16px;">6 palabras → <span class="cyan">~10 tokens</span>. Las palabras largas se parten en varios.</p>
+        <p class="body anim-fade-d4" style="margin-top:28px;">Tu cuota gratuita se mide en tokens: <b>cuanto más largo el texto, más consume</b> —tanto lo que escribís como lo que responde.</p>
+      </div>
+      <!-- DERECHA: escala tokens → páginas -->
+      <div class="card anim-fade-d3" style="padding:30px 34px;">
+        <div style="font-family:var(--mono); font-size:20px; color:var(--ink-2); letter-spacing:.06em; margin-bottom:24px;">CUÁNTO TEXTO ES ESO</div>
+        <div style="display:grid; gap:20px;">
+          <div style="display:flex; align-items:baseline; gap:16px; padding-bottom:18px; border-bottom:1px solid var(--line);">
+            <span style="font-family:var(--mono); font-size:30px; color:var(--cyan); min-width:250px;">1.000 tokens</span>
+            <span class="small">≈ 1½ páginas · un correo largo</span>
+          </div>
+          <div style="display:flex; align-items:baseline; gap:16px; padding-bottom:18px; border-bottom:1px solid var(--line);">
+            <span style="font-family:var(--mono); font-size:30px; color:var(--mint); min-width:250px;">128.000 tokens</span>
+            <span class="small">≈ 300 páginas · una novela</span>
+          </div>
+          <div style="display:flex; align-items:baseline; gap:16px; padding-bottom:18px; border-bottom:1px solid var(--line);">
+            <span style="font-family:var(--mono); font-size:30px; color:var(--amber); min-width:250px;">256.000 tokens</span>
+            <span class="small">≈ 600 páginas · dos novelas</span>
+          </div>
+          <div style="display:flex; align-items:baseline; gap:16px;">
+            <span style="font-family:var(--mono); font-size:30px; color:var(--coral); min-width:250px;">1.000.000 tokens</span>
+            <span class="small">≈ 2.500 páginas · varios libros</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card cyan anim-fade-d5" style="margin-top:30px;">
+      <p class="body"><b class="cyan">¿Por qué te importa?</b> Una ventana de <b>1 millón de tokens</b> te deja pegarle a la IA <b>un libro entero</b>, todo tu syllabus o decenas de trabajos, y que los tenga presentes de una sola vez.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 07 — LOS LLM MÁS IMPORTANTES -->
+<!-- ============================================================ -->
+<section data-label="07 LLM más importantes">
+  <div class="progress"><span class="done"></span><span class="active"></span><span></span><span></span><span></span></div>
+  <div class="chrome">
+    <div class="chrome-top">
+      <div class="tag">// FUNDAMENTOS_05</div>
+      <img class="logo-wm" src="assets/logo-utesa.png" alt="UTESA" />
+    </div>
+    <div class="chrome-bottom">
+      <div>FUNDAMENTOS</div>
+      <div class="pagenum"><b>07</b> / 18</div>
+    </div>
+  </div>
+  <div class="frame top">
     <div class="anim-fade" style="font-family:var(--mono); font-size:24px; color:var(--cyan); letter-spacing:.16em; margin-bottom:14px;">LAS HERRAMIENTAS</div>
-    <h2 class="h2 anim-fade-d1">Los <span class="cyan">tres LLM</span> que vas a usar.</h2>
+    <h2 class="h2 anim-fade-d1">Los <span class="cyan">tres LLM</span> más importantes.</h2>
     <div class="anim-stagger" style="display:grid; grid-template-columns:repeat(3,1fr); gap:28px; margin-top:58px;">
       <div class="card mint">
         <div style="font-family:var(--mono); font-size:20px; color:var(--mint); letter-spacing:.06em; margin-bottom:18px;">OPENAI</div>
