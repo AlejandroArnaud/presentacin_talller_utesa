@@ -12,5 +12,9 @@ Thumbs.db
 *.tmp
 *.log
 
+# portal (build)
+node_modules/
+build/
+
 # superpowers (companion de brainstorm, sesiones locales)
 .superpowers/

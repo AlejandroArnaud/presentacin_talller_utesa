@@ -1,0 +1,11 @@
+{
+  "name": "portal-recursos-docentes",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build-portal.mjs"
+  },
+  "devDependencies": {
+    "marked": "^12.0.0"
+  }
+}

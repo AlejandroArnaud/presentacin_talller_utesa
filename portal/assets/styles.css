@@ -1,0 +1,10 @@
+/* Portal de Recursos Docentes — design system (stub).
+   Los tokens y componentes completos se implementan en la Tarea 4 (§4 del spec).
+   El verde provisional #0F5132 se sustituirá por el verde oficial de UTESA. */
+:root{
+  --em:#0F5132; --em-deep:#0B3D2E; --gold:#A98B5D;
+  --paper:#F6F7F9; --surface:#FFFFFF; --ink:#14161A; --ink-soft:#3A3D42;
+  --muted:#6B7079; --line:#E8EAED; --line-2:#D7DAE0;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:'Inter',system-ui,sans-serif;line-height:1.6}
