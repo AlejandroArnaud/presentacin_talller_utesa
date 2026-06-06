@@ -1,0 +1,714 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<title>Uso Pedagógico de la Inteligencia Artificial · Taller UTESA Dajabón</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="deck-stage.js"></script>
+<style>
+  :root{
+    --bg:#0A0A0F;
+    --bg-2:#0E1018;
+    --ink:#F5F5F7;
+    --ink-2:#8B8B95;
+    --line:#1E2230;
+    --cyan:#00E5FF;
+    --amber:#FFB020;
+    --mint:#3EE6A8;
+    --coral:#FF4D6D;
+    --sans:'Inter',system-ui,sans-serif;
+    --display:'Space Grotesk','Inter',system-ui,sans-serif;
+    --mono:'JetBrains Mono',ui-monospace,monospace;
+  }
+  html,body{margin:0;background:#000;color:var(--ink);font-family:var(--sans);}
+  deck-stage{ background:#000; }
+  section{
+    background:
+      radial-gradient(ellipse at 80% -10%, rgba(0,229,255,0.07), transparent 50%),
+      radial-gradient(ellipse at 0% 110%, rgba(62,230,168,0.05), transparent 50%),
+      linear-gradient(180deg,#0A0A0F 0%, #0B0E18 100%);
+    color:var(--ink);
+    overflow:hidden;
+    position:relative;
+    font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;
+  }
+  /* Subtle grid background, applied to all slides */
+  section::before{
+    content:"";
+    position:absolute; inset:0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 80px 80px;
+    pointer-events:none;
+    mask-image: radial-gradient(ellipse at center, #000 50%, transparent 95%);
+  }
+  /* Section progress bar — 5 segments */
+  .progress{
+    position:absolute; top:0; left:0; right:0; height:3px;
+    display:flex; gap:6px; padding:24px 80px 0; z-index:10;
+  }
+  .progress span{ flex:1; height:3px; background:rgba(255,255,255,0.08); border-radius:2px; overflow:hidden; position:relative;}
+  .progress span.done::after{ content:""; position:absolute; inset:0; background:var(--cyan); }
+  .progress span.active::after{ content:""; position:absolute; inset:0; background:linear-gradient(90deg, var(--cyan), rgba(0,229,255,0.2)); }
+
+  /* Slide chrome: page number + corner tag */
+  .chrome{
+    position:absolute; inset:0; padding:60px 80px; z-index:5;
+    display:flex; flex-direction:column; pointer-events:none;
+  }
+  .chrome-top{ display:flex; justify-content:space-between; align-items:flex-start; }
+  .chrome-bottom{ margin-top:auto; display:flex; justify-content:space-between; align-items:flex-end; color:var(--ink-2); font-family:var(--mono); font-size:24px; letter-spacing:0.08em;}
+  .pagenum{ font-family:var(--mono); color:var(--ink-2); font-size:24px; letter-spacing:0.12em; }
+  .pagenum b{ color:var(--ink); font-weight:500;}
+  .tag{ font-family:var(--mono); font-size:24px; letter-spacing:0.14em; color:var(--cyan); text-transform:uppercase;}
+  .tag.amber{ color:var(--amber); }
+  .tag.mint{ color:var(--mint); }
+  .tag.coral{ color:var(--coral); }
+  .tag.muted{ color:var(--ink-2); }
+
+  /* Slide content frame */
+  .frame{
+    position:absolute; inset:0; padding:120px 120px 100px;
+    display:flex; flex-direction:column; justify-content:center;
+    z-index:2;
+  }
+  .frame.center{ align-items:center; text-align:center; justify-content:center;}
+  .frame.top{ justify-content:flex-start; padding-top:160px;}
+
+  h1,h2,h3,p{ margin:0; }
+
+  /* Type scale */
+  .display { font-family:var(--display); font-weight:700; font-size:120px; line-height:1.02; letter-spacing:-0.03em;}
+  .title   { font-family:var(--display); font-weight:700; font-size:84px; line-height:1.05; letter-spacing:-0.025em;}
+  .h2      { font-family:var(--display); font-weight:600; font-size:64px; line-height:1.08; letter-spacing:-0.02em;}
+  .h3      { font-family:var(--display); font-weight:600; font-size:48px; line-height:1.15; letter-spacing:-0.015em;}
+  .lead    { font-family:var(--sans); font-size:36px; line-height:1.35; color:var(--ink); font-weight:400;}
+  .body    { font-family:var(--sans); font-size:30px; line-height:1.45; color:var(--ink); font-weight:400;}
+  .small   { font-family:var(--sans); font-size:24px; line-height:1.4; color:var(--ink-2); font-weight:400;}
+  .mono    { font-family:var(--mono); font-size:26px; letter-spacing:0.04em; color:var(--cyan);}
+  .muted   { color:var(--ink-2); }
+  .cyan    { color:var(--cyan); }
+  .amber   { color:var(--amber); }
+  .mint    { color:var(--mint); }
+  .coral   { color:var(--coral); }
+  .underline-cyan{ background-image:linear-gradient(transparent 70%, rgba(0,229,255,0.35) 70%); }
+
+  /* Number / counter style */
+  .bignum{
+    font-family:var(--display); font-weight:700;
+    font-size:280px; line-height:1; letter-spacing:-0.04em;
+    background:linear-gradient(180deg,#fff 0%, #00E5FF 110%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    text-shadow:0 0 60px rgba(0,229,255,0.25);
+  }
+
+  /* ENTRY ANIMATIONS — only run when slide is active */
+  section[data-active] .anim-fade   { animation: fadeUp .7s cubic-bezier(.2,.7,.2,1) both; }
+  section[data-active] .anim-fade-d1{ animation: fadeUp .7s cubic-bezier(.2,.7,.2,1) .1s both; }
+  section[data-active] .anim-fade-d2{ animation: fadeUp .7s cubic-bezier(.2,.7,.2,1) .25s both; }
+  section[data-active] .anim-fade-d3{ animation: fadeUp .7s cubic-bezier(.2,.7,.2,1) .4s both; }
+  section[data-active] .anim-fade-d4{ animation: fadeUp .7s cubic-bezier(.2,.7,.2,1) .55s both; }
+  section[data-active] .anim-fade-d5{ animation: fadeUp .7s cubic-bezier(.2,.7,.2,1) .7s both; }
+  section[data-active] .anim-fade-d6{ animation: fadeUp .7s cubic-bezier(.2,.7,.2,1) .85s both; }
+  section[data-active] .anim-stagger > *{ animation: fadeUp .6s cubic-bezier(.2,.7,.2,1) both; }
+  section[data-active] .anim-stagger > *:nth-child(1){ animation-delay: .15s; }
+  section[data-active] .anim-stagger > *:nth-child(2){ animation-delay: .30s; }
+  section[data-active] .anim-stagger > *:nth-child(3){ animation-delay: .45s; }
+  section[data-active] .anim-stagger > *:nth-child(4){ animation-delay: .60s; }
+  section[data-active] .anim-stagger > *:nth-child(5){ animation-delay: .75s; }
+  section[data-active] .anim-stagger > *:nth-child(6){ animation-delay: .90s; }
+  section[data-active] .anim-stagger > *:nth-child(7){ animation-delay: 1.05s; }
+  section[data-active] .anim-stagger > *:nth-child(8){ animation-delay: 1.20s; }
+  section[data-active] .anim-stagger > *:nth-child(9){ animation-delay: 1.35s; }
+  section[data-active] .anim-stagger > *:nth-child(10){ animation-delay: 1.50s; }
+  section[data-active] .anim-stagger > *:nth-child(11){ animation-delay: 1.65s; }
+  section[data-active] .anim-stagger > *:nth-child(12){ animation-delay: 1.80s; }
+
+  @keyframes fadeUp { from{ opacity:0; transform:translateY(28px); } to{ opacity:1; transform:none; } }
+  @keyframes fadeIn { from{ opacity:0;} to{opacity:1;} }
+  @keyframes pulse  { 0%,100%{ opacity:.85; transform:scale(1);} 50%{ opacity:1; transform:scale(1.03);} }
+  @keyframes breathe{ 0%,100%{ opacity:.4;} 50%{ opacity:.9; } }
+  @keyframes float  { 0%,100%{ transform:translateY(0);} 50%{ transform:translateY(-8px);} }
+  @keyframes drawIn { to{ stroke-dashoffset:0; } }
+  @keyframes glow   { 0%,100%{ filter:drop-shadow(0 0 8px rgba(0,229,255,.5));} 50%{ filter:drop-shadow(0 0 20px rgba(0,229,255,.85));} }
+  @keyframes glitchX{ 0%,100%{ transform:translate(0);} 20%{transform:translate(-3px,1px);} 40%{transform:translate(2px,-1px);} 60%{transform:translate(-1px,2px);} 80%{transform:translate(1px,0);} }
+  @keyframes scanline{ 0%{ transform:translateY(-100%);} 100%{ transform:translateY(100%);} }
+
+  /* Typewriter — uses inline-block + width animation; we set steps via .tw class */
+  .tw{ display:inline-block; overflow:hidden; white-space:nowrap; vertical-align:bottom; border-right:3px solid var(--cyan);}
+  section[data-active] .tw{ animation: tw 1.6s steps(40,end) both, blink .9s steps(2) infinite;}
+  @keyframes tw{ from{ width:0;} to{ width:100%;} }
+  @keyframes blink{ 50%{ border-color:transparent;} }
+
+  /* Card */
+  .card{
+    background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:36px 40px;
+    backdrop-filter:blur(4px);
+  }
+  .card.cyan{ border-color: rgba(0,229,255,0.35); box-shadow: 0 0 0 1px rgba(0,229,255,0.06) inset, 0 30px 80px -40px rgba(0,229,255,0.4);}
+  .card.amber{ border-color: rgba(255,176,32,0.35); }
+  .card.coral{ border-color: rgba(255,77,109,0.35); }
+  .card.mint { border-color: rgba(62,230,168,0.35); }
+
+  /* Constellation canvas — full-bleed background animation */
+  .constellation{ position:absolute; inset:0; z-index:1; }
+  .scanlines{
+    position:absolute; inset:0; z-index:1; pointer-events:none;
+    background:repeating-linear-gradient(transparent 0 3px, rgba(255,255,255,0.012) 3px 4px);
+    mix-blend-mode:overlay;
+  }
+
+  /* Glitch text */
+  .glitch{ position:relative; display:inline-block; }
+  section[data-active] .glitch::before,
+  section[data-active] .glitch::after{
+    content:attr(data-text); position:absolute; inset:0;
+    mix-blend-mode:screen;
+  }
+  section[data-active] .glitch::before{ color:var(--cyan); animation:glitchX 2.6s infinite steps(1); transform:translate(-2px,0);}
+  section[data-active] .glitch::after{ color:var(--coral); animation:glitchX 2.2s infinite steps(1) reverse; transform:translate(2px,0);}
+
+  /* Connector lines around figure */
+  .ring{ position:relative; width:880px; height:680px; margin:0 auto;}
+  .silhouette{
+    position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+    width:130px; height:200px;
+    border-radius:65px 65px 30px 30px / 90px 90px 30px 30px;
+    background:radial-gradient(circle at 50% 30%, rgba(0,229,255,0.15), rgba(0,229,255,0) 70%);
+    border:1px solid rgba(0,229,255,0.4);
+    animation: pulse 2.4s ease-in-out infinite;
+  }
+  .silhouette::before{
+    content:""; position:absolute; left:50%; top:18%; transform:translate(-50%,-50%);
+    width:54px; height:54px; border-radius:50%;
+    border:1px solid rgba(0,229,255,0.5);
+    background: rgba(0,229,255,0.06);
+  }
+  .ring .node{
+    position:absolute;
+    width:auto; transform:translate(-50%,-50%);
+    text-align:center;
+    opacity:0;
+  }
+  section[data-active] .ring .node{ animation: fadeUp .5s cubic-bezier(.2,.7,.2,1) both; }
+  .ring .node .ico{
+    width:72px; height:72px; border-radius:14px;
+    border:1px solid rgba(0,229,255,0.35);
+    background:rgba(0,229,255,0.06);
+    display:flex; align-items:center; justify-content:center;
+    margin:0 auto 10px; color:var(--cyan);
+    font-size:28px;
+    box-shadow: 0 0 24px -8px rgba(0,229,255,0.6);
+  }
+  .ring .node .lbl{
+    font-family:var(--mono); font-size:24px; letter-spacing:0.05em;
+    color:var(--ink); white-space:nowrap;
+  }
+  .ring .node .what{
+    font-family:var(--sans); font-size:24px; color:var(--ink-2); margin-top:4px;
+  }
+
+  /* Code block */
+  .code{
+    background:#06080F; border:1px solid var(--line); border-radius:14px;
+    padding:32px 36px; font-family:var(--mono); font-size:30px; line-height:1.5;
+    color:var(--ink);
+    box-shadow: inset 0 0 0 1px rgba(0,229,255,0.05);
+  }
+  .code .kw{ color:var(--coral); }
+  .code .fn{ color:var(--cyan); }
+  .code .str{ color:var(--mint); }
+  .code .cm{ color:var(--ink-2); font-style:italic;}
+
+  /* Vote buttons */
+  .vote{
+    display:flex; flex-direction:column; gap:18px;
+  }
+  .opt{
+    display:flex; align-items:center; gap:24px;
+    padding:26px 32px;
+    border:1px solid var(--line); border-radius:14px;
+    background:rgba(255,255,255,0.02);
+    transition: transform .15s ease, background .2s ease, border-color .2s ease;
+    cursor:pointer;
+  }
+  .opt:hover{ background:rgba(0,229,255,0.06); border-color:rgba(0,229,255,0.5); transform:translateY(-2px); }
+  .opt:active{ transform:translateY(1px) scale(.997); }
+  .opt .key{
+    width:54px; height:54px; flex:0 0 54px; border-radius:12px;
+    background:rgba(0,229,255,0.1); color:var(--cyan);
+    border:1px solid rgba(0,229,255,0.4);
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--display); font-weight:700; font-size:28px;
+  }
+  .opt .txt{ font-family:var(--sans); font-size:30px; line-height:1.35; color:var(--ink);}
+
+  /* SQL log table */
+  .logtable{
+    font-family:var(--mono); font-size:26px; color:var(--ink);
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+  }
+  .logtable .row{
+    display:grid; grid-template-columns: 90px 1fr 220px;
+    padding:14px 0; border-bottom:1px dashed rgba(255,255,255,0.06);
+    opacity:0;
+  }
+  section[data-active] .logtable .row{ animation: fadeIn .35s ease-out both; }
+  .logtable .row:nth-child(1){ animation-delay:.4s !important;}
+  .logtable .row:nth-child(2){ animation-delay:.7s !important;}
+  .logtable .row:nth-child(3){ animation-delay:1.0s !important;}
+  .logtable .row:nth-child(4){ animation-delay:1.3s !important;}
+  .logtable .row:nth-child(5){ animation-delay:1.6s !important;}
+  .logtable .row .id{ color:var(--ink-2); }
+  .logtable .row .name{ color:var(--ink); }
+  .logtable .row .meta{ color:var(--cyan); text-align:right;}
+
+  /* Section divider slides — big editorial number */
+  .editorial-num{
+    font-family:var(--display); font-weight:700;
+    font-size:380px; line-height:0.85; letter-spacing:-0.05em;
+    color:transparent; -webkit-text-stroke:2px rgba(255,255,255,0.14);
+    position:absolute; right:80px; bottom:80px; user-select:none;
+    z-index:0; pointer-events:none;
+  }
+
+  /* Scenario / leak panel */
+  .leak{
+    background:#06080F; border:1px solid rgba(255,77,109,0.3);
+    border-radius:14px; padding:28px 32px;
+    font-family:var(--mono); font-size:24px;
+    box-shadow: 0 0 60px -20px rgba(255,77,109,0.4);
+  }
+  .leak .lrow{ display:grid; grid-template-columns:140px 1fr; padding:10px 0; border-bottom:1px dashed rgba(255,255,255,0.08); opacity:0;}
+  section[data-active] .leak .lrow{ animation: fadeIn .35s ease-out both; }
+  .leak .lrow:nth-child(1){ animation-delay:.4s !important;}
+  .leak .lrow:nth-child(2){ animation-delay:.9s !important;}
+  .leak .lrow:nth-child(3){ animation-delay:1.4s !important;}
+  .leak .lrow:nth-child(4){ animation-delay:1.9s !important;}
+  .leak .ts{ color:var(--ink-2); }
+  .leak .what{ color:var(--ink); }
+  .leak .alert{ color:var(--coral); animation:breathe 1.4s ease-in-out infinite;}
+
+  /* Six principles grid */
+  .grid6{ display:grid; grid-template-columns:repeat(3, 1fr); gap:24px; }
+  .principle{
+    background:rgba(255,255,255,0.02);
+    border:1px solid var(--line); border-radius:16px;
+    padding:30px 30px 32px;
+    position:relative; overflow:hidden;
+  }
+  .principle .pico{
+    width:54px; height:54px; margin-bottom:18px;
+    color:var(--mint);
+  }
+  .principle h4{ font-family:var(--display); font-size:32px; font-weight:700; margin:0 0 8px; color:var(--ink);}
+  .principle p{ font-family:var(--sans); font-size:24px; line-height:1.4; color:var(--ink-2);}
+
+  /* Stroke draw on icons */
+  .draw{ stroke-dasharray:200; stroke-dashoffset:200; }
+  section[data-active] .draw{ animation: drawIn 1.2s ease-out forwards; }
+  section[data-active] .principle:nth-child(1) .draw{ animation-delay:.3s;}
+  section[data-active] .principle:nth-child(2) .draw{ animation-delay:.5s;}
+  section[data-active] .principle:nth-child(3) .draw{ animation-delay:.7s;}
+  section[data-active] .principle:nth-child(4) .draw{ animation-delay:.9s;}
+  section[data-active] .principle:nth-child(5) .draw{ animation-delay:1.1s;}
+  section[data-active] .principle:nth-child(6) .draw{ animation-delay:1.3s;}
+
+  /* Balance / scale visual */
+  .scale-wrap{ width:100%; display:flex; justify-content:center; align-items:center; margin-top:30px;}
+  .scale{
+    width:900px; height:380px; position:relative;
+  }
+  .scale .beam{
+    position:absolute; left:50%; top:120px; width:760px; height:6px;
+    background:linear-gradient(90deg, rgba(0,229,255,0.6), rgba(255,77,109,0.6));
+    transform:translate(-50%,0) rotate(0deg);
+    transform-origin:50% 50%;
+    border-radius:3px;
+    animation: tilt 4s cubic-bezier(.4,.1,.3,1) infinite;
+  }
+  @keyframes tilt{
+    0%{ transform:translate(-50%,0) rotate(0deg);}
+    25%{ transform:translate(-50%,0) rotate(-14deg);}
+    100%{ transform:translate(-50%,0) rotate(-14deg);}
+  }
+  .scale .pivot{ position:absolute; left:50%; top:120px; width:30px; height:200px;
+    transform:translate(-50%,0); background:linear-gradient(180deg, rgba(255,255,255,0.4), rgba(255,255,255,0)); }
+  .scale .pan{ position:absolute; top:0; width:240px; text-align:center; font-family:var(--mono); font-size:24px; color:var(--ink-2); }
+  .scale .pan .glyph{ font-family:var(--display); font-weight:700; font-size:120px; line-height:1; color:var(--ink); }
+  .scale .pan.left{ left:80px; animation: tiltL 4s cubic-bezier(.4,.1,.3,1) infinite;}
+  .scale .pan.right{ right:80px; animation: tiltR 4s cubic-bezier(.4,.1,.3,1) infinite;}
+  @keyframes tiltL{ 0%{ transform:translateY(0);} 25%,100%{ transform:translateY(60px);} }
+  @keyframes tiltR{ 0%{ transform:translateY(0);} 25%,100%{ transform:translateY(-50px);} }
+
+  /* Cover constellation overlay */
+  .cover-grid{
+    position:absolute; inset:0;
+    background-image:
+      linear-gradient(rgba(0,229,255,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,229,255,0.06) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse at center, #000 30%, transparent 80%);
+    z-index:0;
+  }
+
+  /* Logo watermark */
+  .logo-wm{
+    width:64px; height:64px; opacity:.65;
+    filter: brightness(1.15) contrast(1.1);
+  }
+
+  /* ≠ flicker */
+  .neq{ display:inline-block; animation: neq 1.6s ease-in-out infinite; }
+  @keyframes neq{ 0%,100%{ opacity:1; text-shadow:0 0 24px rgba(255,176,32,.5);} 50%{ opacity:.55;} }
+
+  /* Closing glow */
+  .uplight{
+    position:absolute; left:0; right:0; bottom:-200px; height:600px;
+    background:radial-gradient(ellipse at 50% 100%, rgba(0,229,255,0.25), transparent 60%);
+    z-index:1; pointer-events:none;
+    opacity:0;
+  }
+  section[data-active] .uplight{ animation: fadeIn 2.2s ease-out 2.5s forwards; }
+
+  /* arrows & flow */
+  .arrow{ width:28px; height:28px; color:var(--cyan); }
+
+  /* Counter element */
+  .counter[data-target]{ display:inline-block; }
+
+  /* Apps ring positions handled inline via style left/top */
+</style>
+</head>
+<body>
+
+<deck-stage width="1920" height="1080">
+
+<!-- ============================================================ -->
+<!-- 01 — PORTADA -->
+<!-- ============================================================ -->
+<section data-label="01 Portada">
+  <canvas class="constellation" id="cov-canvas" style="width:100%;height:100%;display:block;"></canvas>
+  <div class="cover-grid"></div>
+  <div class="progress"><span class="active"></span><span></span><span></span><span></span><span></span></div>
+  <div class="chrome">
+    <div class="chrome-top">
+      <div class="tag">// TALLER DE CAPACITACIÓN DOCENTE</div>
+      <img class="logo-wm" src="assets/logo-utesa.png" alt="UTESA" />
+    </div>
+    <div class="chrome-bottom">
+      <div>UTESA · RECINTO DAJABÓN · 2026</div>
+      <div class="pagenum"><b>01</b> / 18</div>
+    </div>
+  </div>
+  <div class="frame">
+    <div style="max-width:1500px;">
+      <div class="anim-fade-d1" style="font-family:var(--mono); font-size:24px; color:var(--cyan); letter-spacing:.18em; margin-bottom:36px;">TALLER PRÁCTICO · 2 HORAS</div>
+      <h1 class="display" style="font-size:140px;">
+        <span class="anim-fade-d1" style="display:block;">Uso Pedagógico de la</span>
+        <span class="anim-fade-d2" style="display:block;">Inteligencia <span class="cyan">Artificial.</span></span>
+      </h1>
+      <p class="lead anim-fade-d4" style="margin-top:48px; max-width:1150px; color:var(--ink-2);">
+        El mundo pedagógico <span class="cyan">cambió para siempre</span>. Adaptarnos ya no es opcional.
+      </p>
+      <div class="anim-fade-d5" style="margin-top:80px; display:flex; gap:60px; align-items:center;">
+        <div>
+          <div class="small" style="font-family:var(--mono); letter-spacing:.12em; color:var(--ink-2);">FACILITA</div>
+          <div class="body" style="margin-top:4px;">Alejandro Arnaud</div>
+          <div class="small" style="margin-top:4px;">UTESA · Recinto Dajabón</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 02 — FACILITADOR -->
+<!-- ============================================================ -->
+<section data-label="02 Facilitador">
+  <div class="progress"><span class="active"></span><span></span><span></span><span></span><span></span></div>
+  <div class="chrome">
+    <div class="chrome-top">
+      <div class="tag muted">// QUIÉN FACILITA</div>
+      <img class="logo-wm" src="assets/logo-utesa.png" alt="UTESA" />
+    </div>
+    <div class="chrome-bottom">
+      <div>APERTURA</div>
+      <div class="pagenum"><b>02</b> / 18</div>
+    </div>
+  </div>
+  <div class="frame">
+    <div style="max-width:1640px; width:100%;">
+      <div class="anim-fade" style="font-family:var(--mono); font-size:24px; color:var(--cyan); letter-spacing:.16em; margin-bottom:22px;">FACILITADOR</div>
+      <h1 class="title anim-fade-d1">Alejandro Arnaud</h1>
+      <p class="lead anim-fade-d2" style="margin-top:22px; color:var(--ink-2); max-width:1300px;">
+        Ingeniero en sistemas · <span class="cyan">20 años</span> en desarrollo de software · <span class="cyan">+10 años</span> como docente.
+      </p>
+      <div class="anim-stagger" style="display:grid; grid-template-columns:repeat(3,1fr); gap:24px; margin-top:58px;">
+        <div class="card">
+          <div style="font-family:var(--mono); font-size:20px; color:var(--mint); letter-spacing:.08em; margin-bottom:16px;">MAESTRÍA</div>
+          <h4 style="font-family:var(--display); font-weight:700; font-size:36px; color:var(--ink); margin:0 0 10px;">Tecnología Educativa</h4>
+          <p class="small">Mención: Diseño Instruccional</p>
+        </div>
+        <div class="card cyan">
+          <div style="font-family:var(--mono); font-size:20px; color:var(--cyan); letter-spacing:.08em; margin-bottom:16px;">MAESTRÍA · EN CURSO</div>
+          <h4 style="font-family:var(--display); font-weight:700; font-size:36px; color:var(--ink); margin:0 0 10px;">Ciencia de Datos</h4>
+          <p class="small">y Análisis Avanzado</p>
+        </div>
+        <div class="card cyan">
+          <div style="font-family:var(--mono); font-size:20px; color:var(--cyan); letter-spacing:.08em; margin-bottom:16px;">MAESTRÍA · EN CURSO</div>
+          <h4 style="font-family:var(--display); font-weight:700; font-size:36px; color:var(--ink); margin:0 0 10px;">Inteligencia Artificial</h4>
+          <p class="small">Aplicada a la educación</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 03 — QUÉ ES IA GENERATIVA / LLM -->
+<!-- ============================================================ -->
+<section data-label="03 IA generativa y LLM">
+  <div class="progress"><span class="done"></span><span class="active"></span><span></span><span></span><span></span></div>
+  <div class="chrome">
+    <div class="chrome-top">
+      <div class="tag">// FUNDAMENTOS_01</div>
+      <img class="logo-wm" src="assets/logo-utesa.png" alt="UTESA" />
+    </div>
+    <div class="chrome-bottom">
+      <div>FUNDAMENTOS</div>
+      <div class="pagenum"><b>03</b> / 18</div>
+    </div>
+  </div>
+  <div class="frame top">
+    <div class="anim-fade" style="font-family:var(--mono); font-size:24px; color:var(--cyan); letter-spacing:.16em; margin-bottom:14px;">PRIMERO, LO BÁSICO</div>
+    <h2 class="h2 anim-fade-d1" style="max-width:1480px;">¿Qué es la <span class="cyan">IA generativa</span> y qué es un <span class="cyan">LLM</span>?</h2>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:32px; margin-top:56px;">
+      <div class="card mint anim-fade-d2">
+        <div style="font-family:var(--mono); font-size:22px; color:var(--mint); letter-spacing:.06em; margin-bottom:16px;">IA GENERATIVA</div>
+        <p class="body">Tecnología que <b>crea contenido nuevo</b> —texto, imágenes, código— a partir de patrones aprendidos de enormes cantidades de datos.</p>
+      </div>
+      <div class="card cyan anim-fade-d3">
+        <div style="font-family:var(--mono); font-size:22px; color:var(--cyan); letter-spacing:.06em; margin-bottom:16px;">LLM · LARGE LANGUAGE MODEL</div>
+        <p class="body">El "motor" del texto: <b>predice la siguiente palabra</b>, una y otra vez. No consulta una base de datos de hechos.</p>
+      </div>
+    </div>
+    <p class="lead anim-fade-d4" style="margin-top:46px; color:var(--ink-2);">En el fondo: un <span class="cyan">autocompletar</span> extraordinariamente potente — por eso a veces inventa ("alucina").</p>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 04 — CÓMO SE ENTRENA -->
+<!-- ============================================================ -->
+<section data-label="04 Cómo se entrena un LLM">
+  <div class="progress"><span class="done"></span><span class="active"></span><span></span><span></span><span></span></div>
+  <div class="chrome">
+    <div class="chrome-top">
+      <div class="tag">// FUNDAMENTOS_02</div>
+      <img class="logo-wm" src="assets/logo-utesa.png" alt="UTESA" />
+    </div>
+    <div class="chrome-bottom">
+      <div>FUNDAMENTOS</div>
+      <div class="pagenum"><b>04</b> / 18</div>
+    </div>
+  </div>
+  <div class="frame top">
+    <div class="anim-fade" style="font-family:var(--mono); font-size:24px; color:var(--cyan); letter-spacing:.16em; margin-bottom:14px;">CÓMO APRENDE (Y CÓMO NO)</div>
+    <h2 class="h2 anim-fade-d1" style="max-width:1480px;">Se entrena <span class="cyan">una vez</span>. Después, <span class="amber">queda congelado.</span></h2>
+    <div class="anim-fade-d2" style="display:flex; align-items:stretch; gap:18px; margin-top:54px;">
+      <div class="card" style="flex:1;">
+        <div style="font-family:var(--mono); font-size:20px; color:var(--mint); margin-bottom:12px;">01 · DATOS</div>
+        <p class="body">Miles de millones de textos: libros, web, código.</p>
+      </div>
+      <div style="display:flex; align-items:center; font-size:44px; color:var(--cyan);">→</div>
+      <div class="card" style="flex:1;">
+        <div style="font-family:var(--mono); font-size:20px; color:var(--mint); margin-bottom:12px;">02 · ENTRENAMIENTO</div>
+        <p class="body">Meses de cómputo, muy costoso. Ajusta miles de millones de parámetros.</p>
+      </div>
+      <div style="display:flex; align-items:center; font-size:44px; color:var(--cyan);">→</div>
+      <div class="card cyan" style="flex:1;">
+        <div style="font-family:var(--mono); font-size:20px; color:var(--cyan); margin-bottom:12px;">03 · MODELO CONGELADO</div>
+        <p class="body">El resultado ya no cambia con el uso.</p>
+      </div>
+    </div>
+    <div class="card coral anim-fade-d4" style="margin-top:34px;">
+      <p class="body"><b class="coral">No "aprende" de tus conversaciones.</b> Para que cambie hay que <b>reentrenarlo</b> con datos nuevos — un proceso aparte, no algo que pase mientras chateás.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 05 — VENTANA DE CONTEXTO (simulación) -->
+<!-- ============================================================ -->
+<section data-label="05 Ventana de contexto">
+  <div class="progress"><span class="done"></span><span class="active"></span><span></span><span></span><span></span></div>
+  <div class="chrome">
+    <div class="chrome-top">
+      <div class="tag">// FUNDAMENTOS_03</div>
+      <img class="logo-wm" src="assets/logo-utesa.png" alt="UTESA" />
+    </div>
+    <div class="chrome-bottom">
+      <div>FUNDAMENTOS</div>
+      <div class="pagenum"><b>05</b> / 18</div>
+    </div>
+  </div>
+  <div class="frame top">
+    <div class="anim-fade" style="font-family:var(--mono); font-size:24px; color:var(--cyan); letter-spacing:.16em; margin-bottom:14px;">LA MEMORIA DEL MODELO</div>
+    <h2 class="h2 anim-fade-d1" style="max-width:1320px;">La <span class="cyan">ventana de contexto</span>: lo único que el modelo "ve".</h2>
+    <div style="display:grid; grid-template-columns:1.05fr 1fr; gap:56px; margin-top:46px; align-items:start;">
+      <div>
+        <p class="body anim-fade-d2">Cada mensaje —tuyo y del modelo— ocupa lugar en una <b>ventana de tamaño fijo</b>. El modelo solo razona con lo que cabe ahí dentro.</p>
+        <p class="body anim-fade-d3" style="margin-top:22px;">Cuando se llena, lo más <b class="coral">viejo se cae</b>: por eso a veces "olvida" el inicio de una conversación larga.</p>
+        <div class="anim-fade-d4" style="margin-top:30px; font-family:var(--mono); font-size:24px; color:var(--ink-2);">
+          <span class="cyan">128.000 tokens</span> ≈ ~300 páginas de texto.
+        </div>
+      </div>
+      <div class="card" style="padding:0; overflow:hidden;">
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:18px 24px; border-bottom:1px solid var(--line);">
+          <span style="font-family:var(--mono); font-size:20px; color:var(--ink-2); letter-spacing:.06em;">VENTANA DE CONTEXTO</span>
+          <span id="ctx-count" style="font-family:var(--mono); font-size:20px; color:var(--cyan);">0 / 5</span>
+        </div>
+        <div style="height:4px; background:rgba(255,255,255,0.06);"><div id="ctx-bar" style="height:100%; width:0; background:linear-gradient(90deg,var(--cyan),rgba(0,229,255,.3)); transition:width .5s;"></div></div>
+        <div id="ctx-stream" style="padding:26px; display:flex; flex-direction:column; gap:16px; min-height:360px;"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 06 — LOS LLM MÁS USADOS -->
+<!-- ============================================================ -->
+<section data-label="06 LLM más usados">
+  <div class="progress"><span class="done"></span><span class="active"></span><span></span><span></span><span></span></div>
+  <div class="chrome">
+    <div class="chrome-top">
+      <div class="tag">// FUNDAMENTOS_04</div>
+      <img class="logo-wm" src="assets/logo-utesa.png" alt="UTESA" />
+    </div>
+    <div class="chrome-bottom">
+      <div>FUNDAMENTOS</div>
+      <div class="pagenum"><b>06</b> / 18</div>
+    </div>
+  </div>
+  <div class="frame top">
+    <div class="anim-fade" style="font-family:var(--mono); font-size:24px; color:var(--cyan); letter-spacing:.16em; margin-bottom:14px;">LAS HERRAMIENTAS</div>
+    <h2 class="h2 anim-fade-d1">Los <span class="cyan">tres LLM</span> que vas a usar.</h2>
+    <div class="anim-stagger" style="display:grid; grid-template-columns:repeat(3,1fr); gap:28px; margin-top:58px;">
+      <div class="card mint">
+        <div style="font-family:var(--mono); font-size:20px; color:var(--mint); letter-spacing:.06em; margin-bottom:18px;">OPENAI</div>
+        <h3 class="h3" style="font-size:46px; margin-bottom:14px;">ChatGPT</h3>
+        <p class="body" style="color:var(--ink-2);">El más popular y accesible. Ideal para empezar: planificar, redactar y crear ejemplos.</p>
+      </div>
+      <div class="card cyan">
+        <div style="font-family:var(--mono); font-size:20px; color:var(--cyan); letter-spacing:.06em; margin-bottom:18px;">GOOGLE</div>
+        <h3 class="h3" style="font-size:46px; margin-bottom:14px;">Gemini</h3>
+        <p class="body" style="color:var(--ink-2);">Integrado con Google. Fuerte en imágenes, documentos y búsqueda.</p>
+      </div>
+      <div class="card coral">
+        <div style="font-family:var(--mono); font-size:20px; color:var(--coral); letter-spacing:.06em; margin-bottom:18px;">ANTHROPIC</div>
+        <h3 class="h3" style="font-size:46px; margin-bottom:14px;">Claude</h3>
+        <p class="body" style="color:var(--ink-2);">Excelente para textos largos y recursos HTML limpios (Artifacts).</p>
+      </div>
+    </div>
+    <p class="lead anim-fade-d5" style="margin-top:42px; color:var(--ink-2);">Las tres tienen <span class="cyan">versión gratuita</span> y funcionan en español.</p>
+  </div>
+</section>
+
+</deck-stage>
+
+<script>
+(function(){
+  // Puente: deck-stage marca [data-deck-active]; el CSS de autor anima con [data-active].
+  var deck = document.querySelector('deck-stage');
+  function syncActive(slide){
+    var prev = document.querySelectorAll('section[data-active]');
+    for (var i=0;i<prev.length;i++) prev[i].removeAttribute('data-active');
+    if (slide) slide.setAttribute('data-active','');
+  }
+  if (deck) deck.addEventListener('slidechange', function(e){ syncActive(e.detail.slide); });
+  syncActive(document.querySelector('section[data-deck-active]'));
+
+  // Constelación animada de la portada.
+  var cv = document.getElementById('cov-canvas');
+  if (cv && cv.getContext){
+    var ctx = cv.getContext('2d');
+    function size(){ cv.width = cv.clientWidth || 1920; cv.height = cv.clientHeight || 1080; }
+    size(); requestAnimationFrame(size);
+    var N = 72, pts = [];
+    for (var i=0;i<N;i++){
+      var a = i*2.39996, r = 0.5*Math.sqrt((i+1)/N);
+      pts.push({ x:0.5+Math.cos(a)*r*0.92, y:0.5+Math.sin(a)*r*0.92,
+                 vx:Math.cos(i*1.7)*0.0005, vy:Math.sin(i*2.3)*0.0005 });
+    }
+    function frame(){
+      var w=cv.width, h=cv.height; if(!w||!h){ size(); requestAnimationFrame(frame); return; }
+      ctx.clearRect(0,0,w,h);
+      for (var i=0;i<N;i++){ var p=pts[i]; p.x+=p.vx; p.y+=p.vy;
+        if(p.x<0.02||p.x>0.98)p.vx*=-1; if(p.y<0.02||p.y>0.98)p.vy*=-1; }
+      for (var i=0;i<N;i++) for (var j=i+1;j<N;j++){
+        var aa=pts[i], bb=pts[j], dx=(aa.x-bb.x)*w, dy=(aa.y-bb.y)*h, d=Math.sqrt(dx*dx+dy*dy);
+        if (d<175){ ctx.strokeStyle='rgba(0,229,255,'+(0.12*(1-d/175))+')'; ctx.lineWidth=1;
+          ctx.beginPath(); ctx.moveTo(aa.x*w,aa.y*h); ctx.lineTo(bb.x*w,bb.y*h); ctx.stroke(); }
+      }
+      for (var i=0;i<N;i++){ var p=pts[i]; ctx.fillStyle='rgba(0,229,255,0.55)';
+        ctx.beginPath(); ctx.arc(p.x*w,p.y*h,1.7,0,6.2832); ctx.fill(); }
+      requestAnimationFrame(frame);
+    }
+    window.addEventListener('resize', size);
+    requestAnimationFrame(frame);
+  }
+
+  // ── Slide 5: simulación de la ventana de contexto ──────────────
+  (function(){
+    var stream = document.getElementById('ctx-stream');
+    var deckEl = document.querySelector('deck-stage');
+    if (!stream || !deckEl) return;
+    var turns = [
+      ['TÚ','¿Qué es un LLM?'],
+      ['IA','Un modelo que predice la siguiente palabra.'],
+      ['TÚ','Dame un ejemplo para mi clase.'],
+      ['IA','Un quiz de 5 preguntas sobre tu tema.'],
+      ['TÚ','Hazlo un poco más difícil.'],
+      ['IA','Listo: subí el nivel de exigencia.'],
+      ['TÚ','¿Recordás mi primera pregunta?'],
+      ['IA','Esa ya se salió de la ventana…']
+    ];
+    var MAX = 5, i = 0, timer = null;
+    function paint(){
+      var startK = Math.max(0, i - MAX), html = '';
+      for (var k=startK; k<i; k++){
+        var m = turns[k % turns.length];
+        var fading = (k===startK && i>MAX);
+        var col = m[0]==='TÚ' ? 'var(--cyan)' : 'var(--mint)';
+        html += '<div style="opacity:'+(fading?0.28:1)+';transition:opacity .5s;font-family:var(--sans);font-size:26px;line-height:1.3;">'
+              + '<span style="font-family:var(--mono);font-size:19px;color:'+col+';letter-spacing:.04em;">'+m[0]+' &middot; </span>'
+              + m[1] + '</div>';
+      }
+      stream.innerHTML = html;
+      var cnt = document.getElementById('ctx-count');
+      if (cnt) cnt.textContent = Math.min(i,MAX)+' / '+MAX + (i>MAX ? '  · cae el más viejo' : '');
+      var bar = document.getElementById('ctx-bar');
+      if (bar) bar.style.width = (Math.min(i,MAX)/MAX*100)+'%';
+    }
+    function start(){ if (timer) return; i = MAX + 1; paint(); timer = setInterval(function(){ i = i>1000 ? MAX+1 : i+1; paint(); }, 1500); }
+    function stop(){ if (timer){ clearInterval(timer); timer=null; } }
+    function check(slide){
+      var on = slide && (slide.getAttribute('data-label')||'').indexOf('Ventana de contexto')>=0;
+      if (on) start(); else stop();
+    }
+    deckEl.addEventListener('slidechange', function(e){ check(e.detail.slide); });
+    check(document.querySelector('section[data-deck-active]'));
+  })();
+})();
+</script>
+
+</body>
+</html>
