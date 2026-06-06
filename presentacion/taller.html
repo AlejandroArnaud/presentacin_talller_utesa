@@ -623,7 +623,7 @@
           <span class="tok alt">.</span>
         </div>
         <p class="small anim-fade-d3" style="margin-top:16px;">6 palabras → <span class="cyan">~10 tokens</span>. Las palabras largas se parten en varios.</p>
-        <p class="body anim-fade-d4" style="margin-top:28px;">Tu cuota gratuita se mide en tokens: <b>cuanto más largo el texto, más consume</b> —tanto lo que escribís como lo que responde.</p>
+        <p class="body anim-fade-d4" style="margin-top:28px;">Tu cuota gratuita se mide en tokens: <b>cuanto más largo el texto, más consume</b> —tanto lo que escribes como lo que responde.</p>
       </div>
       <!-- DERECHA: escala tokens → páginas -->
       <div class="card anim-fade-d3" style="padding:30px 34px;">
@@ -649,7 +649,7 @@
       </div>
     </div>
     <div class="card cyan anim-fade-d5" style="margin-top:30px;">
-      <p class="body"><b class="cyan">¿Por qué te importa?</b> Una ventana de <b>1 millón de tokens</b> te deja pegarle a la IA <b>un libro entero</b>, todo tu syllabus o decenas de trabajos, y que los tenga presentes de una sola vez.</p>
+      <p class="body"><b class="cyan">¿Por qué te importa?</b> Una ventana de <b>1 millón de tokens</b> te permite darle a la IA <b>un libro entero</b>, todo tu syllabus o decenas de trabajos, y que los tenga presentes de una sola vez.</p>
     </div>
   </div>
 </section>
@@ -690,6 +690,327 @@
       </div>
     </div>
     <p class="lead anim-fade-d5" style="margin-top:42px; color:var(--ink-2);">Las tres tienen <span class="cyan">versión gratuita</span> y funcionan en español.</p>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 08 — ¿QUÉ ES UN PROMPT? -->
+<!-- ============================================================ -->
+<section data-label="08 Qué es un prompt">
+  <div class="progress"><span class="done"></span><span class="done"></span><span class="active"></span><span></span><span></span></div>
+  <div class="chrome">
+    <div class="chrome-top">
+      <div class="tag amber">// PROMPT_01</div>
+      <img class="logo-wm" src="assets/logo-utesa.png" alt="UTESA" />
+    </div>
+    <div class="chrome-bottom">
+      <div>EL PROMPT</div>
+      <div class="pagenum"><b>08</b> / 18</div>
+    </div>
+  </div>
+  <div class="frame top">
+    <div class="anim-fade" style="font-family:var(--mono); font-size:24px; color:var(--amber); letter-spacing:.16em; margin-bottom:14px;">HABLARLE A LA IA</div>
+    <h2 class="h2 anim-fade-d1">El <span class="amber">prompt</span>: la instrucción que le das a la IA.</h2>
+    <div style="display:grid; grid-template-columns:1.05fr 1fr; gap:56px; margin-top:44px; align-items:start;">
+      <div>
+        <p class="body anim-fade-d2">Un prompt es, simplemente, <b>lo que le escribes para pedirle algo</b>. No hay que aprender comandos: se le habla en <b>lenguaje natural</b>, en español.</p>
+        <p class="body anim-fade-d3" style="margin-top:22px;">Cuanto más claro eres sobre lo que quieres, mejor responde. Una instrucción vaga produce una respuesta vaga.</p>
+      </div>
+      <div class="card amber anim-fade-d3" style="padding:30px 34px;">
+        <div style="font-family:var(--mono); font-size:20px; color:var(--ink-2); letter-spacing:.06em; margin-bottom:22px;">CÓMO FLUYE</div>
+        <div style="display:flex; flex-direction:column; gap:14px; font-family:var(--mono); font-size:25px;">
+          <div><span class="amber">TÚ ESCRIBES</span> · tu pedido en español</div>
+          <div style="color:var(--ink-2);">↓</div>
+          <div><span class="cyan">LA IA</span> · interpreta y genera</div>
+          <div style="color:var(--ink-2);">↓</div>
+          <div><span class="mint">RESPUESTA</span> · texto, quiz, recurso…</div>
+        </div>
+      </div>
+    </div>
+    <div class="card amber anim-fade-d5" style="margin-top:30px;">
+      <p class="body"><b class="amber">Principio clave —</b> la calidad de la respuesta depende de la calidad de tu pregunta: <b>basura entra, basura sale</b>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 09 — ANATOMÍA DE UN BUEN PROMPT -->
+<!-- ============================================================ -->
+<section data-label="09 Anatomía del prompt">
+  <div class="progress"><span class="done"></span><span class="done"></span><span class="active"></span><span></span><span></span></div>
+  <div class="chrome">
+    <div class="chrome-top">
+      <div class="tag amber">// PROMPT_02</div>
+      <img class="logo-wm" src="assets/logo-utesa.png" alt="UTESA" />
+    </div>
+    <div class="chrome-bottom">
+      <div>EL PROMPT</div>
+      <div class="pagenum"><b>09</b> / 18</div>
+    </div>
+  </div>
+  <div class="frame top">
+    <div class="anim-fade" style="font-family:var(--mono); font-size:24px; color:var(--amber); letter-spacing:.16em; margin-bottom:14px;">LOS INGREDIENTES</div>
+    <h2 class="h2 anim-fade-d1">Un buen prompt tiene <span class="amber">cuatro piezas</span>.</h2>
+    <div class="anim-stagger" style="display:grid; grid-template-columns:repeat(4,1fr); gap:24px; margin-top:48px;">
+      <div class="card" style="padding:24px 26px;">
+        <div style="font-family:var(--mono); font-size:19px; color:var(--amber); letter-spacing:.06em; margin-bottom:12px;">1 · ROL</div>
+        <p class="small" style="color:var(--ink); font-size:23px; line-height:1.35;">Quién quieres que sea la IA.</p>
+        <p style="margin-top:12px; color:var(--ink-2); font-family:var(--mono); font-size:18px; line-height:1.4;">«Actúa como docente de biología…»</p>
+      </div>
+      <div class="card" style="padding:24px 26px;">
+        <div style="font-family:var(--mono); font-size:19px; color:var(--cyan); letter-spacing:.06em; margin-bottom:12px;">2 · TAREA</div>
+        <p class="small" style="color:var(--ink); font-size:23px; line-height:1.35;">Qué debe hacer, con un verbo claro.</p>
+        <p style="margin-top:12px; color:var(--ink-2); font-family:var(--mono); font-size:18px; line-height:1.4;">«…crea un cuestionario…»</p>
+      </div>
+      <div class="card" style="padding:24px 26px;">
+        <div style="font-family:var(--mono); font-size:19px; color:var(--mint); letter-spacing:.06em; margin-bottom:12px;">3 · CONTEXTO</div>
+        <p class="small" style="color:var(--ink); font-size:23px; line-height:1.35;">Sobre qué tema y para quién.</p>
+        <p style="margin-top:12px; color:var(--ink-2); font-family:var(--mono); font-size:18px; line-height:1.4;">«…de la célula, para 8.º grado…»</p>
+      </div>
+      <div class="card" style="padding:24px 26px;">
+        <div style="font-family:var(--mono); font-size:19px; color:var(--coral); letter-spacing:.06em; margin-bottom:12px;">4 · FORMATO</div>
+        <p class="small" style="color:var(--ink); font-size:23px; line-height:1.35;">Cómo quieres el resultado.</p>
+        <p style="margin-top:12px; color:var(--ink-2); font-family:var(--mono); font-size:18px; line-height:1.4;">«…opción múltiple, con respuestas.»</p>
+      </div>
+    </div>
+    <div class="card amber anim-fade-d5" style="margin-top:30px;">
+      <div style="font-family:var(--mono); font-size:19px; color:var(--ink-2); letter-spacing:.06em; margin-bottom:14px;">LAS CUATRO, JUNTAS</div>
+      <p style="font-family:var(--mono); font-size:26px; line-height:1.5;"><span class="amber">Actúa como docente de biología</span> y <span class="cyan">crea un cuestionario</span> <span class="mint">de 5 preguntas sobre la célula, para 8.º grado</span>, <span class="coral">de opción múltiple, con respuestas y en español.</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 10 — UN PROMPT DOCENTE, PASO A PASO -->
+<!-- ============================================================ -->
+<section data-label="10 Prompt paso a paso">
+  <div class="progress"><span class="done"></span><span class="done"></span><span class="active"></span><span></span><span></span></div>
+  <div class="chrome">
+    <div class="chrome-top">
+      <div class="tag amber">// PROMPT_03</div>
+      <img class="logo-wm" src="assets/logo-utesa.png" alt="UTESA" />
+    </div>
+    <div class="chrome-bottom">
+      <div>EL PROMPT</div>
+      <div class="pagenum"><b>10</b> / 18</div>
+    </div>
+  </div>
+  <div class="frame top">
+    <div class="anim-fade" style="font-family:var(--mono); font-size:24px; color:var(--amber); letter-spacing:.16em; margin-bottom:14px;">DE VAGO A POTENTE</div>
+    <h2 class="h2 anim-fade-d1">El mismo pedido, <span class="amber">antes y después</span>.</h2>
+    <div style="display:grid; grid-template-columns:1fr 1.25fr; gap:40px; margin-top:48px; align-items:start;">
+      <div class="card coral anim-fade-d2" style="padding:30px 34px;">
+        <div style="font-family:var(--mono); font-size:20px; color:var(--coral); letter-spacing:.06em; margin-bottom:18px;">ANTES · PROMPT VAGO</div>
+        <p style="font-family:var(--mono); font-size:26px; line-height:1.45;">«Hazme un quiz sobre la independencia.»</p>
+        <p class="small" style="margin-top:20px;">→ Resultado genérico: sin nivel, sin formato, sin respuestas. Hay que rehacerlo.</p>
+      </div>
+      <div class="card mint anim-fade-d3" style="padding:30px 34px;">
+        <div style="font-family:var(--mono); font-size:20px; color:var(--mint); letter-spacing:.06em; margin-bottom:18px;">DESPUÉS · PROMPT CLARO</div>
+        <p style="font-family:var(--mono); font-size:24px; line-height:1.5;"><span class="amber">Actúa como docente de Historia.</span> <span class="cyan">Crea un quiz de 8 preguntas</span> <span class="mint">sobre la independencia dominicana, para nivel universitario inicial</span>, <span class="coral">de opción múltiple, con respuestas y breve retroalimentación, en español.</span></p>
+        <p class="small" style="margin-top:20px;">→ Listo para usar en clase.</p>
+      </div>
+    </div>
+    <p class="small anim-fade-d5" style="margin-top:26px;">Las cuatro piezas —<span class="amber">rol</span> · <span class="cyan">tarea</span> · <span class="mint">contexto</span> · <span class="coral">formato</span>— convirtieron un pedido vago en uno que sirve.</p>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 11 — ITERAR Y REFINAR -->
+<!-- ============================================================ -->
+<section data-label="11 Iterar y refinar">
+  <div class="progress"><span class="done"></span><span class="done"></span><span class="active"></span><span></span><span></span></div>
+  <div class="chrome">
+    <div class="chrome-top">
+      <div class="tag amber">// PROMPT_04</div>
+      <img class="logo-wm" src="assets/logo-utesa.png" alt="UTESA" />
+    </div>
+    <div class="chrome-bottom">
+      <div>EL PROMPT</div>
+      <div class="pagenum"><b>11</b> / 18</div>
+    </div>
+  </div>
+  <div class="frame top">
+    <div class="anim-fade" style="font-family:var(--mono); font-size:24px; color:var(--amber); letter-spacing:.16em; margin-bottom:14px;">CONVERSA, NO ACIERTES A LA PRIMERA</div>
+    <h2 class="h2 anim-fade-d1">El prompt no termina en el <span class="amber">primer intento</span>.</h2>
+    <div style="display:grid; grid-template-columns:1.1fr 1fr; gap:48px; margin-top:46px; align-items:start;">
+      <div class="card anim-fade-d2" style="padding:0; overflow:hidden;">
+        <div style="padding:18px 26px; border-bottom:1px solid var(--line); font-family:var(--mono); font-size:20px; color:var(--ink-2); letter-spacing:.06em;">AFINANDO EL RESULTADO</div>
+        <div style="padding:24px 26px; display:flex; flex-direction:column; gap:16px; font-family:var(--sans); font-size:25px; line-height:1.3;">
+          <div><span style="font-family:var(--mono); font-size:18px; color:var(--amber);">TÚ · </span>«Crea un quiz sobre la célula.»</div>
+          <div style="color:var(--ink-2);"><span style="font-family:var(--mono); font-size:18px; color:var(--mint);">IA · </span>5 preguntas básicas.</div>
+          <div><span style="font-family:var(--mono); font-size:18px; color:var(--amber);">TÚ · </span>«Hazlo más difícil y agrega 2 de desarrollo.»</div>
+          <div style="color:var(--ink-2);"><span style="font-family:var(--mono); font-size:18px; color:var(--mint);">IA · </span>Subí el nivel y añadí 2 abiertas.</div>
+          <div><span style="font-family:var(--mono); font-size:18px; color:var(--amber);">TÚ · </span>«Ahora dame también la rúbrica.»</div>
+        </div>
+      </div>
+      <div>
+        <p class="body anim-fade-d3"><b>Pide ajustes</b> en vez de empezar de cero. La IA <b>recuerda la conversación</b> (su ventana de contexto): no repitas todo.</p>
+        <div class="card coral anim-fade-d4" style="margin-top:24px; padding:24px 28px;">
+          <div style="font-family:var(--mono); font-size:19px; color:var(--coral); letter-spacing:.06em; margin-bottom:14px;">ERRORES COMUNES</div>
+          <p class="small" style="color:var(--ink); font-size:23px; line-height:1.5;">Pedir demasiado de golpe · no dar contexto · no decir el formato esperado.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 12 — ¿QUÉ ES UN HTML? -->
+<!-- ============================================================ -->
+<section data-label="12 Qué es un HTML">
+  <div class="progress"><span class="done"></span><span class="done"></span><span class="done"></span><span class="active"></span><span></span></div>
+  <div class="chrome">
+    <div class="chrome-top">
+      <div class="tag mint">// HTML_01</div>
+      <img class="logo-wm" src="assets/logo-utesa.png" alt="UTESA" />
+    </div>
+    <div class="chrome-bottom">
+      <div>RECURSOS HTML</div>
+      <div class="pagenum"><b>12</b> / 18</div>
+    </div>
+  </div>
+  <div class="frame top">
+    <div class="anim-fade" style="font-family:var(--mono); font-size:24px; color:var(--mint); letter-spacing:.16em; margin-bottom:14px;">TU NUEVO ALIADO</div>
+    <h2 class="h2 anim-fade-d1">El <span class="mint">HTML</span>: un archivo que abre en cualquier navegador.</h2>
+    <div style="display:grid; grid-template-columns:1.1fr 1fr; gap:56px; margin-top:44px; align-items:start;">
+      <div>
+        <p class="body anim-fade-d2">HTML es el formato de las páginas web. Para ti es <b>un solo archivo</b> que se abre con doble clic en Chrome, Edge o el navegador del celular —<b>sin instalar nada</b>.</p>
+        <p class="body anim-fade-d3" style="margin-top:22px;">Y lo mejor: <b>no necesitas saber programar</b>. La IA escribe el HTML por ti; tú solo lo pides, lo descargas y lo abres.</p>
+      </div>
+      <div class="card mint anim-fade-d3" style="padding:30px 34px;">
+        <div style="font-family:var(--mono); font-size:20px; color:var(--ink-2); letter-spacing:.06em; margin-bottom:22px;">EN LA PRÁCTICA</div>
+        <div style="display:flex; flex-direction:column; gap:14px; font-family:var(--mono); font-size:25px;">
+          <div><span class="mint">▸ mi_recurso.html</span></div>
+          <div style="color:var(--ink-2);">↓ doble clic</div>
+          <div>se abre en tu navegador</div>
+        </div>
+        <p class="small" style="margin-top:22px;">Funciona en cualquier computadora, incluso sin internet.</p>
+      </div>
+    </div>
+    <div class="card mint anim-fade-d5" style="margin-top:30px;">
+      <p class="body"><b class="mint">La alternativa ligera a PowerPoint —</b> nada que instalar, nada que se descuadre. Un .html viaja en un correo o un USB y funciona en cualquier equipo.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 13 — QUÉ PUEDES CREAR -->
+<!-- ============================================================ -->
+<section data-label="13 Qué puedes crear">
+  <div class="progress"><span class="done"></span><span class="done"></span><span class="done"></span><span class="active"></span><span></span></div>
+  <div class="chrome">
+    <div class="chrome-top">
+      <div class="tag mint">// HTML_02</div>
+      <img class="logo-wm" src="assets/logo-utesa.png" alt="UTESA" />
+    </div>
+    <div class="chrome-bottom">
+      <div>RECURSOS HTML</div>
+      <div class="pagenum"><b>13</b> / 18</div>
+    </div>
+  </div>
+  <div class="frame top">
+    <div class="anim-fade" style="font-family:var(--mono); font-size:24px; color:var(--mint); letter-spacing:.16em; margin-bottom:14px;">NO HAY LÍMITE</div>
+    <h2 class="h2 anim-fade-d1">Todo esto, en <span class="mint">un solo archivo</span>.</h2>
+    <div class="anim-stagger" style="display:grid; grid-template-columns:repeat(3,1fr); gap:24px; margin-top:48px;">
+      <div class="card" style="padding:26px 28px;">
+        <div style="font-family:var(--mono); font-size:19px; color:var(--mint); letter-spacing:.06em; margin-bottom:12px;">PRESENTACIONES</div>
+        <p class="small" style="color:var(--ink-2); font-size:23px; line-height:1.4;">Como esta que estás viendo.</p>
+      </div>
+      <div class="card" style="padding:26px 28px;">
+        <div style="font-family:var(--mono); font-size:19px; color:var(--mint); letter-spacing:.06em; margin-bottom:12px;">QUIZZES INTERACTIVOS</div>
+        <p class="small" style="color:var(--ink-2); font-size:23px; line-height:1.4;">Con puntaje y retroalimentación al instante.</p>
+      </div>
+      <div class="card" style="padding:26px 28px;">
+        <div style="font-family:var(--mono); font-size:19px; color:var(--mint); letter-spacing:.06em; margin-bottom:12px;">SIMULACIONES</div>
+        <p class="small" style="color:var(--ink-2); font-size:23px; line-height:1.4;">Mueves una variable y ves el efecto.</p>
+      </div>
+      <div class="card" style="padding:26px 28px;">
+        <div style="font-family:var(--mono); font-size:19px; color:var(--mint); letter-spacing:.06em; margin-bottom:12px;">LÍNEAS DE TIEMPO</div>
+        <p class="small" style="color:var(--ink-2); font-size:23px; line-height:1.4;">Navegables, para historia o procesos.</p>
+      </div>
+      <div class="card" style="padding:26px 28px;">
+        <div style="font-family:var(--mono); font-size:19px; color:var(--mint); letter-spacing:.06em; margin-bottom:12px;">INFOGRAFÍAS</div>
+        <p class="small" style="color:var(--ink-2); font-size:23px; line-height:1.4;">Resúmenes visuales de un tema.</p>
+      </div>
+      <div class="card" style="padding:26px 28px;">
+        <div style="font-family:var(--mono); font-size:19px; color:var(--mint); letter-spacing:.06em; margin-bottom:12px;">JUEGOS DE REPASO</div>
+        <p class="small" style="color:var(--ink-2); font-size:23px; line-height:1.4;">Memoria, ruleta, «¿quién quiere ser…?».</p>
+      </div>
+    </div>
+    <p class="small anim-fade-d6" style="margin-top:28px;">Para proyectar en el aula o compartir con tus estudiantes por enlace o archivo.</p>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 14 — CÓMO SE LO PIDES A LA IA -->
+<!-- ============================================================ -->
+<section data-label="14 Cómo se lo pides">
+  <div class="progress"><span class="done"></span><span class="done"></span><span class="done"></span><span class="active"></span><span></span></div>
+  <div class="chrome">
+    <div class="chrome-top">
+      <div class="tag mint">// HTML_03</div>
+      <img class="logo-wm" src="assets/logo-utesa.png" alt="UTESA" />
+    </div>
+    <div class="chrome-bottom">
+      <div>RECURSOS HTML</div>
+      <div class="pagenum"><b>14</b> / 18</div>
+    </div>
+  </div>
+  <div class="frame top">
+    <div class="anim-fade" style="font-family:var(--mono); font-size:24px; color:var(--mint); letter-spacing:.16em; margin-bottom:14px;">EL PEDIDO + EL USO</div>
+    <h2 class="h2 anim-fade-d1">Pídelo, descárgalo, <span class="mint">proyéctalo</span>.</h2>
+    <div style="display:grid; grid-template-columns:1.25fr 1fr; gap:48px; margin-top:46px; align-items:start;">
+      <div class="card mint anim-fade-d2" style="padding:30px 34px;">
+        <div style="font-family:var(--mono); font-size:20px; color:var(--ink-2); letter-spacing:.06em; margin-bottom:18px;">EL PROMPT</div>
+        <p style="font-family:var(--mono); font-size:24px; line-height:1.55;">«Créame en <span class="mint">un solo archivo HTML</span> una <span class="amber">[tipo de recurso]</span> sobre <span class="cyan">[tema]</span> para <span class="coral">[grado]</span>. Que incluya <span class="cyan">[lo que debe tener]</span>. Sin librerías externas, que abra con doble clic.»</p>
+        <p class="small" style="margin-top:20px;">Es el mismo prompt que ya aprendiste —solo pides que el resultado sea un <b>.html</b>.</p>
+      </div>
+      <div class="anim-fade-d3">
+        <div style="display:flex; flex-direction:column; gap:18px;">
+          <div class="card" style="padding:22px 26px;"><span style="font-family:var(--mono); color:var(--mint); font-size:24px;">1 · PEDIR</span><p class="small" style="margin-top:8px; color:var(--ink-2);">Describes el recurso a la IA.</p></div>
+          <div class="card" style="padding:22px 26px;"><span style="font-family:var(--mono); color:var(--mint); font-size:24px;">2 · DESCARGAR</span><p class="small" style="margin-top:8px; color:var(--ink-2);">Guardas el archivo .html.</p></div>
+          <div class="card" style="padding:22px 26px;"><span style="font-family:var(--mono); color:var(--mint); font-size:24px;">3 · ABRIR / PROYECTAR</span><p class="small" style="margin-top:8px; color:var(--ink-2);">Doble clic y a clase.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 15 — ESTO ES HTML (DEMO / CIERRE DEL ARCO) -->
+<!-- ============================================================ -->
+<section data-label="15 Esto es HTML">
+  <div class="progress"><span class="done"></span><span class="done"></span><span class="done"></span><span class="active"></span><span></span></div>
+  <div class="chrome">
+    <div class="chrome-top">
+      <div class="tag mint">// HTML_04</div>
+      <img class="logo-wm" src="assets/logo-utesa.png" alt="UTESA" />
+    </div>
+    <div class="chrome-bottom">
+      <div>RECURSOS HTML</div>
+      <div class="pagenum"><b>15</b> / 18</div>
+    </div>
+  </div>
+  <div class="frame top">
+    <div class="anim-fade" style="font-family:var(--mono); font-size:24px; color:var(--mint); letter-spacing:.16em; margin-bottom:14px;">DE LA IDEA AL RECURSO</div>
+    <h2 class="h2 anim-fade-d1">Esto que estás viendo… <span class="mint">es un archivo HTML</span>.</h2>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:48px; margin-top:46px; align-items:start;">
+      <div>
+        <p class="body anim-fade-d2">Esta presentación, los quizzes, las simulaciones: <b>todo es HTML</b> que la IA generó a partir de un prompt. Un archivo, cero instalaciones.</p>
+        <p class="body anim-fade-d3" style="margin-top:22px; color:var(--ink-2);">Lo que vimos —token, contexto, prompt— se junta aquí: pides, iteras y obtienes un recurso listo para el aula.</p>
+        <p class="anim-fade-d4" style="margin-top:26px; font-family:var(--mono); font-size:25px; color:var(--mint);">▸ Ahora lo vemos funcionando.</p>
+      </div>
+      <div class="card mint anim-fade-d3" style="padding:30px 34px;">
+        <div style="font-family:var(--mono); font-size:19px; color:var(--ink-2); letter-spacing:.06em; margin-bottom:18px;">EJEMPLO · QUIZ INTERACTIVO (.html)</div>
+        <p class="body" style="font-size:27px; margin-bottom:18px;">¿Qué mide la ventana de contexto?</p>
+        <div style="display:flex; flex-direction:column; gap:12px;">
+          <div style="padding:14px 18px; border:1px solid var(--line); border-radius:10px; font-size:23px; color:var(--ink-2);">A) La velocidad de internet</div>
+          <div style="padding:14px 18px; border:1px solid rgba(62,230,168,0.5); border-radius:10px; font-size:23px; background:rgba(62,230,168,0.08);">B) Cuánto texto recuerda la IA <span class="mint">✓</span></div>
+          <div style="padding:14px 18px; border:1px solid var(--line); border-radius:10px; font-size:23px; color:var(--ink-2);">C) El precio del modelo</div>
+        </div>
+        <div style="margin-top:20px; display:inline-block; padding:12px 26px; border-radius:10px; background:linear-gradient(90deg,var(--mint),rgba(62,230,168,.5)); color:#072a1d; font-family:var(--mono); font-size:22px; font-weight:600;">Comprobar</div>
+      </div>
+    </div>
   </div>
 </section>
 
