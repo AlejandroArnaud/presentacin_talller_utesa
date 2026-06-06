@@ -536,6 +536,13 @@ h1[tabindex="-1"]:focus,h2[tabindex="-1"]:focus,
   display:block;margin:0;white-space:pre-wrap;word-break:break-word;
   color:var(--prompt-fg);font-family:var(--font-mono);font-size:.86rem;line-height:1.7;
 }
+/* Reset del <code> que el build anida dentro de <pre> en la vista de materia.
+   Sin esto, la regla `.prose code` le pinta un fondo claro (--paper) con borde,
+   y el texto claro del prompt queda ILEGIBLE (claro sobre claro). Forzamos
+   fondo transparente para que se vea el fondo oscuro del bloque .prompt. */
+.prompt pre,.prompt code,.prompt pre code{
+  background:transparent;border:0;padding:0;border-radius:0;color:var(--prompt-fg);
+}
 .copy-btn{
   position:absolute;top:.65rem;right:.65rem;
   display:inline-flex;align-items:center;gap:.35rem;
