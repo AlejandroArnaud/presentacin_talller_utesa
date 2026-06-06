@@ -29,16 +29,16 @@
   --surface-2:#FCFDFE; /* superficie en hover */
   --ink:#14161A;       /* texto principal */
   --ink-soft:#3A3D42;  /* texto secundario */
-  --muted:#6B7079;     /* texto terciario / labels */
+  --muted:#5B616B;     /* texto terciario / labels (oscurecido para mejor contraste) */
   --line:#E8EAED;      /* hairline */
   --line-2:#D7DAE0;    /* bordes algo más marcados */
 
   /* Bloque de prompt (oscuro) */
   --prompt-bg:#14161A;
-  --prompt-fg:#CFD6D0;
+  --prompt-fg:#E8ECEA;   /* texto del prompt: casi blanco, nítido y legible (antes verdoso apagado) */
   --prompt-line:#2C3531;
   --prompt-line-2:#3F4A45;
-  --prompt-btn:#9FB3A6;
+  --prompt-btn:#D6E2DB;  /* etiqueta del botón Copiar: más brillante sobre el fondo oscuro */
 
   /* Resaltado de búsqueda */
   --mark-bg:#FBF1D8;
@@ -117,6 +117,11 @@ abbr[title]{text-decoration:underline dotted;cursor:help}
 }
 /* No mostrar el anillo cuando el foco viene del puntero */
 :focus:not(:focus-visible){outline:none}
+/* Titulares y contenedores que reciben foco PROGRAMÁTICO al cambiar de vista
+   (para mover el foco de los lectores de pantalla): el foco se traslada igual,
+   pero el recuadro visible sobre un titular no aporta y parece un artefacto. */
+h1[tabindex="-1"]:focus,h2[tabindex="-1"]:focus,
+[data-autofocus][tabindex="-1"]:focus{outline:none}
 
 /* Sólo para lectores de pantalla */
 .sr-only{
@@ -523,22 +528,24 @@ abbr[title]{text-decoration:underline dotted;cursor:help}
   position:relative;
   background:var(--prompt-bg);
   border-radius:var(--r-md);
-  padding:1.05rem 1.1rem;margin:.9rem 0;
+  /* padding-top amplio: deja una franja superior para el botón Copiar,
+     de modo que la primera línea del texto nunca quede debajo del botón. */
+  padding:2.55rem 1.15rem 1.15rem;margin:.9rem 0;
 }
 .prompt-text,.prompt pre,.prompt code{
   display:block;margin:0;white-space:pre-wrap;word-break:break-word;
-  color:var(--prompt-fg);font-family:var(--font-mono);font-size:.8rem;line-height:1.65;
+  color:var(--prompt-fg);font-family:var(--font-mono);font-size:.86rem;line-height:1.7;
 }
 .copy-btn{
-  position:absolute;top:.6rem;right:.6rem;
-  display:inline-flex;align-items:center;gap:.3rem;
-  background:transparent;color:var(--prompt-btn);
-  border:1px solid var(--prompt-line);border-radius:7px;
-  padding:.26rem .6rem;font-family:var(--font-body);font-size:.68rem;font-weight:600;
+  position:absolute;top:.65rem;right:.65rem;
+  display:inline-flex;align-items:center;gap:.35rem;
+  background:rgba(255,255,255,.07);color:var(--prompt-btn);
+  border:1px solid rgba(255,255,255,.2);border-radius:7px;
+  padding:.32rem .65rem;font-family:var(--font-body);font-size:.74rem;font-weight:600;
   cursor:pointer;transition:color var(--t),border-color var(--t),background var(--t);
 }
-.copy-btn:hover{color:#fff;border-color:var(--prompt-line-2)}
-.copy-btn svg{width:13px;height:13px;stroke:currentColor}
+.copy-btn:hover{color:#fff;background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.34)}
+.copy-btn svg{width:14px;height:14px;stroke:currentColor}
 .copy-label{line-height:1}
 .copy-btn:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 .copy-btn.is-copied{color:#fff;border-color:var(--em);background:rgba(15,81,50,.45)}
