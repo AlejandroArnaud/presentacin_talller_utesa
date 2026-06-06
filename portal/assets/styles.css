@@ -1,10 +1,718 @@
-/* Portal de Recursos Docentes — design system (stub).
-   Los tokens y componentes completos se implementan en la Tarea 4 (§4 del spec).
-   El verde provisional #0F5132 se sustituirá por el verde oficial de UTESA. */
+/* ============================================================================
+   Portal de Recursos Docentes — UTESA Dajabón
+   DESIGN SYSTEM (§4 del spec 2026-06-05-portal-recursos-docentes-design.md)
+
+   Estilo: minimal-editorial premium (Swiss + Editorial), tema claro,
+   un único color fuerte (verde esmeralda) sobre neutros fríos, hilo de oro.
+   Tipografía: Playfair Display (titulares) + Inter (texto/UI) + monospace (prompts).
+
+   IMPORTANTE: las clases aquí definidas coinciden con las que emite
+   portal/assets/app.js (sin prefijo). No usar el prefijo .pv-*: el JS no lo emite.
+
+   NOTA: el verde provisional #0F5132 se sustituye por el verde institucional
+   oficial de UTESA cuando se tenga el hex exacto — un solo punto de cambio aquí.
+   ========================================================================== */
+
+/* ----------------------------------------------------------------------------
+   1. Tokens (variables CSS)
+   -------------------------------------------------------------------------- */
 :root{
-  --em:#0F5132; --em-deep:#0B3D2E; --gold:#A98B5D;
-  --paper:#F6F7F9; --surface:#FFFFFF; --ink:#14161A; --ink-soft:#3A3D42;
-  --muted:#6B7079; --line:#E8EAED; --line-2:#D7DAE0;
+  /* Marca / acento */
+  --em:#0F5132;        /* esmeralda profundo — color de marca / acento fuerte */
+  --em-deep:#0B3D2E;   /* hover / énfasis */
+  --em-tint:#EAF1EC;   /* fondo tenue esmeralda (chips, resaltados) */
+  --gold:#A98B5D;      /* detalle premium (filetes, subrayados) — uso mínimo */
+
+  /* Neutros */
+  --paper:#F6F7F9;     /* fondo (gris claro frío) */
+  --surface:#FFFFFF;   /* tarjetas y superficies */
+  --surface-2:#FCFDFE; /* superficie en hover */
+  --ink:#14161A;       /* texto principal */
+  --ink-soft:#3A3D42;  /* texto secundario */
+  --muted:#6B7079;     /* texto terciario / labels */
+  --line:#E8EAED;      /* hairline */
+  --line-2:#D7DAE0;    /* bordes algo más marcados */
+
+  /* Bloque de prompt (oscuro) */
+  --prompt-bg:#14161A;
+  --prompt-fg:#CFD6D0;
+  --prompt-line:#2C3531;
+  --prompt-line-2:#3F4A45;
+  --prompt-btn:#9FB3A6;
+
+  /* Resaltado de búsqueda */
+  --mark-bg:#FBF1D8;
+
+  /* Niveles AIAS (badges) — del esmeralda al oro, mismo idioma cromático */
+  --aias-1:#6B7079;
+  --aias-2:#2F6F58;
+  --aias-3:#0F5132;
+  --aias-4:#8A6A3B;
+  --aias-5:#A98B5D;
+
+  /* Tipografía */
+  --font-head:'Playfair Display',Georgia,'Times New Roman',serif;
+  --font-body:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --font-mono:ui-monospace,'Cascadia Code',Consolas,'Courier New',monospace;
+
+  /* Radios */
+  --r-sm:9px;
+  --r-md:11px;
+  --r-lg:14px;
+  --r-xl:18px;
+  --r-pill:999px;
+
+  /* Layout */
+  --sidebar-w:288px;
+  --content-max:1180px;
+  --header-h:64px;
+
+  /* Transiciones */
+  --t-fast:.15s ease;
+  --t:.2s ease;
+  --t-slow:.3s ease;
+
+  /* Sombras (suaves; el sistema prefiere hairlines) */
+  --shadow-sm:0 1px 2px rgba(20,22,26,.04);
+  --shadow-md:0 8px 24px rgba(20,22,26,.08);
 }
-*{box-sizing:border-box}
-body{margin:0;background:var(--paper);color:var(--ink);font-family:'Inter',system-ui,sans-serif;line-height:1.6}
+
+/* ----------------------------------------------------------------------------
+   2. Reset y base
+   -------------------------------------------------------------------------- */
+*,*::before,*::after{box-sizing:border-box}
+
+html{-webkit-text-size-adjust:100%}
+
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--font-body);
+  font-size:16px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+
+h1,h2,h3,h4{font-family:var(--font-head);font-weight:600;color:var(--ink);line-height:1.15}
+
+a{color:var(--em);text-decoration:none}
+a:hover{color:var(--em-deep);text-decoration:underline}
+
+img,svg{display:block;max-width:100%}
+svg{fill:none}
+
+button{font-family:inherit}
+
+abbr[title]{text-decoration:underline dotted;cursor:help}
+
+::selection{background:var(--em-tint);color:var(--ink)}
+
+/* Foco visible para teclado (accesibilidad) — globalmente */
+:focus-visible{
+  outline:2px solid var(--em);
+  outline-offset:2px;
+  border-radius:4px;
+}
+/* No mostrar el anillo cuando el foco viene del puntero */
+:focus:not(:focus-visible){outline:none}
+
+/* Sólo para lectores de pantalla */
+.sr-only{
+  position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+  overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;
+}
+
+/* ----------------------------------------------------------------------------
+   3. Iconos SVG (trazo). Nunca emojis.
+   -------------------------------------------------------------------------- */
+.ico{
+  width:20px;height:20px;flex:none;
+  stroke:currentColor;stroke-width:1.5;
+  stroke-linecap:round;stroke-linejoin:round;fill:none;
+}
+.ico-sm{width:16px;height:16px}
+
+/* ----------------------------------------------------------------------------
+   4. App shell + layout (grid sidebar + main)
+   -------------------------------------------------------------------------- */
+#app{min-height:100vh;display:flex;flex-direction:column}
+
+/* Cabecera fija (sticky) con marca + buscador global + navegación */
+.topbar{
+  position:sticky;top:0;z-index:40;
+  display:flex;align-items:center;gap:1rem;
+  height:var(--header-h);padding:0 clamp(1rem,3vw,2rem);
+  background:rgba(246,247,249,.86);
+  backdrop-filter:saturate(180%) blur(8px);
+  -webkit-backdrop-filter:saturate(180%) blur(8px);
+  border-bottom:1px solid var(--line);
+}
+.brand{
+  display:flex;align-items:center;gap:.6rem;
+  font-family:var(--font-head);font-weight:600;font-size:1.02rem;color:var(--ink);
+  white-space:nowrap;
+}
+.brand:hover{text-decoration:none;color:var(--ink)}
+.brand-mark{
+  width:30px;height:30px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--em);color:#fff;flex:none;
+}
+.brand-mark svg{width:18px;height:18px;stroke:#fff}
+.brand-text b{display:block;font-weight:600;line-height:1.1}
+.brand-text small{
+  font-family:var(--font-body);font-weight:500;font-size:.7rem;
+  letter-spacing:.06em;text-transform:uppercase;color:var(--muted);
+  display:block;margin-top:1px;
+}
+
+/* Buscador global de la cabecera */
+.topsearch{
+  display:flex;align-items:center;gap:.5rem;
+  background:var(--surface);border:1px solid var(--line-2);border-radius:var(--r-sm);
+  padding:.45rem .7rem;min-width:0;flex:1;max-width:420px;
+  transition:border-color var(--t),box-shadow var(--t);
+}
+.topsearch:focus-within{border-color:var(--em);box-shadow:0 0 0 3px var(--em-tint)}
+.topsearch-ico{display:flex;color:var(--muted);flex:none}
+.topsearch-ico svg{width:18px;height:18px;stroke:currentColor}
+.topsearch input{
+  flex:1;min-width:0;border:none;outline:none;background:transparent;
+  font-family:var(--font-body);font-size:.92rem;color:var(--ink);
+}
+.topsearch input::placeholder{color:var(--muted)}
+
+/* Navegación de secciones */
+.topnav{display:flex;align-items:center;gap:.2rem;flex:none}
+.topnav a{
+  padding:.45rem .7rem;border-radius:var(--r-sm);
+  font-size:.86rem;font-weight:600;color:var(--ink-soft);
+  transition:background var(--t),color var(--t);white-space:nowrap;
+}
+.topnav a:hover{background:var(--surface);color:var(--em);text-decoration:none}
+.topnav a.is-active{color:var(--em);background:var(--em-tint)}
+
+/* Contenedor central (vistas sin sidebar: hub, prompts, pensums, buscar) */
+.container{
+  width:100%;max-width:var(--content-max);margin:0 auto;flex:1;
+  padding:clamp(1.4rem,3vw,2.6rem) clamp(1rem,4vw,3rem);
+}
+
+/* Cuerpo con barra lateral + contenido */
+.layout{
+  display:grid;
+  grid-template-columns:var(--sidebar-w) minmax(0,1fr);
+  align-items:start;
+  flex:1;
+  width:100%;
+  max-width:1600px;
+  margin:0 auto;
+}
+.content{
+  min-width:0;
+  padding:clamp(1.4rem,3vw,2.6rem) clamp(1rem,4vw,3rem);
+}
+
+/* ----------------------------------------------------------------------------
+   5. Sidebar (carreras → materias / índice del taller), colapsable
+   -------------------------------------------------------------------------- */
+.sidebar{
+  position:sticky;top:var(--header-h);
+  align-self:start;
+  height:calc(100vh - var(--header-h));
+  overflow-y:auto;
+  padding:1.4rem 1rem 2rem;
+  border-right:1px solid var(--line);
+  background:var(--paper);
+  -webkit-overflow-scrolling:touch;
+}
+
+/* Botón colapsar (visible solo en móvil) */
+.side-toggle{
+  display:none;align-items:center;gap:.5rem;width:100%;
+  padding:.6rem .7rem;margin-bottom:.6rem;
+  border:1px solid var(--line-2);border-radius:var(--r-sm);
+  background:var(--surface);color:var(--ink);cursor:pointer;
+  font-family:var(--font-body);font-size:.9rem;font-weight:600;
+  transition:border-color var(--t),color var(--t);
+}
+.side-toggle:hover{border-color:var(--em);color:var(--em)}
+.side-toggle svg{width:18px;height:18px;stroke:currentColor;flex:none}
+
+.side-nav ul{list-style:none;margin:0;padding:0}
+.side-group{margin-bottom:.15rem}
+
+/* Encabezado de grupo (carrera) */
+.side-carrera{
+  display:flex;align-items:center;gap:.5rem;width:100%;
+  padding:.5rem .6rem;border-radius:var(--r-sm);
+  font-family:var(--font-body);font-size:.9rem;font-weight:600;color:var(--ink-soft);
+  transition:background var(--t),color var(--t);
+}
+.side-carrera:hover{background:var(--surface);color:var(--ink);text-decoration:none}
+.side-carrera span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.side-carrera small{
+  font-size:.7rem;font-weight:600;color:var(--muted);flex:none;
+  background:var(--surface);border:1px solid var(--line);
+  padding:.05rem .4rem;border-radius:var(--r-pill);
+}
+.side-carrera.is-active{color:var(--em-deep)}
+.side-carrera.is-active small{background:var(--em-tint);border-color:var(--em);color:var(--em-deep)}
+.side-group.is-open>.side-carrera{color:var(--ink)}
+
+/* Sublista de materias (carrera abierta) */
+.side-sub{
+  list-style:none;margin:.15rem 0 .4rem .9rem;padding:0 0 0 .9rem;
+  border-left:1px solid var(--line);
+}
+.side-sub a{
+  display:block;padding:.38rem .6rem;border-radius:var(--r-sm);
+  font-size:.85rem;color:var(--muted);
+  transition:background var(--t),color var(--t);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.side-sub a:hover{background:var(--surface);color:var(--ink);text-decoration:none}
+.side-sub a.is-current,
+.side-sub a[aria-current="page"]{
+  background:var(--em-tint);color:var(--em-deep);font-weight:600;
+  box-shadow:inset 2px 0 0 var(--em);
+}
+
+/* Tabla de contenido del taller (mismo chasis que el sidebar) */
+.sidebar-toc .side-nav a{
+  display:block;padding:.4rem .6rem;border-radius:var(--r-sm);
+  font-size:.85rem;color:var(--ink-soft);line-height:1.4;
+  transition:background var(--t),color var(--t);
+}
+.sidebar-toc .side-nav a:hover{background:var(--surface);color:var(--em);text-decoration:none}
+
+/* ----------------------------------------------------------------------------
+   6. Breadcrumbs
+   -------------------------------------------------------------------------- */
+.crumbs{
+  display:flex;flex-wrap:wrap;align-items:center;gap:.4rem;
+  font-size:.78rem;color:var(--muted);margin-bottom:1rem;
+}
+.crumbs a{color:var(--muted)}
+.crumbs a:hover{color:var(--em)}
+.crumb-sep{color:var(--line-2)}
+
+/* ----------------------------------------------------------------------------
+   7. Hero (hub)
+   -------------------------------------------------------------------------- */
+.hero{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:var(--r-xl);
+  padding:clamp(1.8rem,4vw,3rem) clamp(1.4rem,4vw,2.6rem);
+  margin-bottom:2rem;
+}
+.eyebrow{
+  display:flex;align-items:center;gap:.5rem;
+  font-size:.7rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--muted);margin:0 0 1rem;
+}
+.eyebrow svg{width:15px;height:15px;stroke:currentColor;color:var(--em)}
+.hero-title{
+  font-family:var(--font-head);
+  font-size:clamp(2rem,5vw,2.9rem);font-weight:600;line-height:1.06;letter-spacing:-.02em;
+  margin:0 0 .7rem;color:var(--ink);
+}
+.hero-title i,.hero-lead i{color:var(--em);font-style:italic}
+.hero-lead{color:var(--ink-soft);font-size:clamp(1rem,2.4vw,1.08rem);max-width:60ch;margin:0 0 1.4rem}
+
+/* Buscador grande del hero */
+.hero-search{
+  display:flex;align-items:center;gap:.7rem;
+  background:var(--surface);border:1px solid var(--line-2);border-radius:var(--r-lg);
+  padding:.7rem .85rem .7rem 1.1rem;margin:0 0 1.6rem;max-width:620px;
+  transition:border-color var(--t),box-shadow var(--t);
+}
+.hero-search:focus-within{border-color:var(--em);box-shadow:0 0 0 3px var(--em-tint)}
+.hero-search-ico{display:flex;color:var(--muted);flex:none}
+.hero-search-ico svg{stroke:currentColor}
+.hero-search input{
+  flex:1;min-width:0;border:none;outline:none;background:transparent;
+  font-family:var(--font-body);font-size:1rem;color:var(--ink);
+}
+.hero-search input::placeholder{color:var(--muted)}
+
+/* Estadísticas del hero */
+.stats{
+  display:flex;flex-wrap:wrap;gap:clamp(1.6rem,4vw,2.6rem);
+  list-style:none;margin:0;padding:1.3rem 0 0;border-top:1px solid var(--line);
+}
+.stats b{display:block;font-family:var(--font-head);font-size:1.9rem;font-weight:600;line-height:1;color:var(--ink)}
+.stats b::after{content:"";display:block;width:20px;height:2px;background:var(--gold);margin-top:.45rem}
+.stats span{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-top:.5rem;display:block}
+
+/* ----------------------------------------------------------------------------
+   8. Botones
+   -------------------------------------------------------------------------- */
+.btn{
+  display:inline-flex;align-items:center;gap:.45rem;
+  border-radius:var(--r-sm);padding:.7rem 1.25rem;
+  font-family:var(--font-body);font-weight:600;font-size:.92rem;
+  cursor:pointer;text-decoration:none;
+  background:transparent;color:var(--ink);border:1px solid var(--line-2);
+  transition:background var(--t),border-color var(--t),color var(--t);
+}
+.btn:hover{border-color:var(--em);color:var(--em);text-decoration:none}
+.btn svg{width:18px;height:18px;stroke:currentColor}
+.btn-em{background:var(--em);color:#fff;border-color:var(--em)}
+.btn-em:hover{background:var(--em-deep);border-color:var(--em-deep);color:#fff}
+
+/* ----------------------------------------------------------------------------
+   9. Secciones genéricas + encabezados de página
+   -------------------------------------------------------------------------- */
+.section{margin-bottom:2.4rem}
+.section:last-child{margin-bottom:0}
+.section-head{margin-bottom:1rem}
+.section-head h2{
+  font-size:clamp(1.3rem,3vw,1.6rem);font-weight:600;color:var(--ink);margin:0;
+}
+.section-sub,.section-head p{color:var(--muted);font-size:.9rem;margin:.3rem 0 0}
+
+.page-head{margin-bottom:1.6rem}
+.page-head h1{font-size:clamp(1.7rem,4vw,2.4rem);font-weight:600;color:var(--ink);margin:.2rem 0 .4rem;letter-spacing:-.01em}
+.page-sub{color:var(--ink-soft);font-size:.96rem;margin:.3rem 0 0;max-width:62ch}
+
+/* ----------------------------------------------------------------------------
+   10. Tarjetas de carrera / accesos rápidos (area-grid, quick-grid)
+   -------------------------------------------------------------------------- */
+.area-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem}
+.area-card{
+  display:flex;align-items:center;gap:.9rem;
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);
+  padding:1.1rem 1.2rem;text-decoration:none;color:inherit;
+  transition:border-color var(--t),box-shadow var(--t);
+}
+.area-card:hover{border-color:var(--line-2);box-shadow:var(--shadow-md);text-decoration:none}
+.area-card:hover .area-ico{color:var(--em);border-color:var(--em)}
+.area-card:hover .area-go{color:var(--em);transform:translateX(2px)}
+.area-ico{
+  width:40px;height:40px;border-radius:10px;border:1px solid var(--line-2);
+  color:var(--ink-soft);display:flex;align-items:center;justify-content:center;flex:none;
+  transition:color var(--t),border-color var(--t);
+}
+.area-ico svg{width:20px;height:20px;stroke:currentColor}
+.area-body{display:flex;flex-direction:column;gap:.15rem;min-width:0;flex:1}
+.area-name{font-family:var(--font-head);font-size:1.08rem;font-weight:600;color:var(--ink)}
+.area-meta{font-size:.78rem;color:var(--em);font-weight:600}
+.area-go{color:var(--muted);flex:none;transition:color var(--t),transform var(--t)}
+.area-go svg{stroke:currentColor}
+
+.quick-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem}
+.quick-card{
+  display:flex;flex-direction:column;
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);
+  padding:1.3rem;text-decoration:none;color:inherit;
+  transition:border-color var(--t),box-shadow var(--t);
+}
+.quick-card:hover{border-color:var(--line-2);box-shadow:var(--shadow-md);text-decoration:none}
+.quick-card:hover .quick-ico{color:var(--em);border-color:var(--em)}
+.quick-ico{
+  width:38px;height:38px;border-radius:10px;border:1px solid var(--line-2);
+  color:var(--ink-soft);display:flex;align-items:center;justify-content:center;
+  margin-bottom:.8rem;transition:color var(--t),border-color var(--t);
+}
+.quick-ico svg{width:20px;height:20px;stroke:currentColor}
+.quick-name{font-family:var(--font-head);font-size:1.16rem;font-weight:600;color:var(--ink);margin-bottom:.25rem}
+.quick-desc{font-size:.85rem;color:var(--muted);line-height:1.5}
+
+/* ----------------------------------------------------------------------------
+   11. Listado de materias (vista de carrera)
+   -------------------------------------------------------------------------- */
+.cuat-group{margin-bottom:1.6rem}
+.cuat-title{
+  font-family:var(--font-body);
+  font-size:.72rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted);margin:0 0 .6rem;
+  display:flex;align-items:center;gap:.7rem;
+}
+.cuat-title::after{content:"";flex:1;height:1px;background:var(--line)}
+.mat-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.5rem}
+.mat-row{
+  display:flex;align-items:center;gap:.7rem;
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);
+  padding:.8rem 1rem;text-decoration:none;color:inherit;
+  transition:border-color var(--t),box-shadow var(--t);
+}
+.mat-row:hover{border-color:var(--line-2);box-shadow:var(--shadow-sm);text-decoration:none}
+.mat-row:hover .mat-go{color:var(--em);transform:translateX(2px)}
+.mat-name{flex:1;min-width:0;font-weight:600;color:var(--ink);font-size:.96rem}
+.mat-code{font-family:var(--font-mono);font-size:.74rem;color:var(--muted);flex:none}
+.mat-go{color:var(--muted);flex:none;transition:color var(--t),transform var(--t)}
+.mat-go svg{stroke:currentColor}
+
+/* Badges compactos de nivel AIAS (en filas/resultados) */
+.mat-badges{display:inline-flex;gap:.3rem;flex:none}
+
+/* ----------------------------------------------------------------------------
+   12. Vista de materia (subject) + prosa (Markdown→HTML)
+   -------------------------------------------------------------------------- */
+.subject{
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);
+  padding:clamp(1.2rem,3vw,1.8rem);
+}
+.subject-head{margin-bottom:1.2rem;padding-bottom:1.1rem;border-bottom:1px solid var(--line)}
+.subject-head h1{font-size:clamp(1.4rem,3.5vw,1.8rem);font-weight:600;color:var(--ink);margin:0 0 .4rem}
+.subject-meta{color:var(--muted);font-size:.82rem;margin:0 0 .7rem;display:flex;flex-wrap:wrap;gap:.2rem}
+.subject-meta span+span::before{content:"·";margin:0 .45rem;color:var(--line-2)}
+.subject-meta .mono{font-family:var(--font-mono)}
+
+.mono{font-family:var(--font-mono)}
+
+/* Cuerpo de contenido renderizado */
+.prose{color:var(--ink-soft);font-size:.96rem;line-height:1.7}
+.prose>*:first-child{margin-top:0}
+.prose h2{font-size:1.25rem;margin:1.8rem 0 .6rem;color:var(--ink)}
+.prose h3{font-size:1.05rem;margin:1.4rem 0 .5rem;color:var(--ink)}
+.prose p{margin:.6rem 0}
+.prose ul,.prose ol{margin:.6rem 0;padding-left:1.4rem}
+.prose li{margin:.3rem 0}
+.prose strong{color:var(--ink);font-weight:600}
+.prose a{color:var(--em);text-decoration:underline;text-decoration-color:var(--line-2)}
+.prose a:hover{text-decoration-color:var(--em)}
+.prose hr{border:none;border-top:1px solid var(--line);margin:1.6rem 0}
+.prose blockquote{margin:1rem 0;padding:.6rem 1rem;border-left:3px solid var(--gold);background:var(--paper);border-radius:0 var(--r-sm) var(--r-sm) 0;color:var(--ink-soft)}
+.prose code{font-family:var(--font-mono);font-size:.86em;background:var(--paper);border:1px solid var(--line);border-radius:5px;padding:.05em .35em}
+.prose table{width:100%;border-collapse:collapse;font-size:.88rem;margin:1rem 0}
+.prose th,.prose td{text-align:left;padding:.6rem .8rem;border-bottom:1px solid var(--line)}
+.prose thead th{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:var(--paper)}
+.prose mark{background:var(--mark-bg);color:var(--ink);padding:0 .12em;border-radius:3px;font-weight:600}
+
+/* ----------------------------------------------------------------------------
+   13. Badges de nivel AIAS
+   -------------------------------------------------------------------------- */
+.badges{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.4rem}
+.badge{
+  display:inline-flex;align-items:center;gap:.3rem;
+  font-family:var(--font-body);font-size:.66rem;font-weight:600;
+  letter-spacing:.04em;text-transform:uppercase;
+  padding:.26rem .6rem;border-radius:var(--r-pill);
+  border:1px solid var(--em);color:var(--em);background:transparent;
+  white-space:nowrap;
+}
+.badge-xs{font-size:.6rem;padding:.12rem .4rem;letter-spacing:.02em}
+/* Color por nivel (1..5) */
+.badge-aias.n1{border-color:var(--aias-1);color:var(--aias-1)}
+.badge-aias.n2{border-color:var(--aias-2);color:var(--aias-2)}
+.badge-aias.n3{border-color:var(--aias-3);color:var(--aias-3)}
+.badge-aias.n4{border-color:var(--aias-4);color:var(--aias-4)}
+.badge-aias.n5{border-color:var(--aias-5);color:var(--aias-5)}
+
+/* ----------------------------------------------------------------------------
+   14. Callouts (aviso, etc.)
+   -------------------------------------------------------------------------- */
+.callout{
+  border:1px solid var(--line);border-left-width:3px;border-radius:var(--r-md);
+  background:var(--surface);padding:.9rem 1.05rem;margin:1.2rem 0;
+  font-size:.9rem;color:var(--ink-soft);
+}
+.callout b,.callout strong{color:var(--ink)}
+.callout code{font-family:var(--font-mono);font-size:.86em;background:var(--paper);border:1px solid var(--line);border-radius:5px;padding:.05em .35em}
+.callout-aviso{border-left-color:#B4543A}
+
+/* ----------------------------------------------------------------------------
+   15. Bloque de prompt (oscuro) + botón Copiar
+   -------------------------------------------------------------------------- */
+.prompt{
+  position:relative;
+  background:var(--prompt-bg);
+  border-radius:var(--r-md);
+  padding:1.05rem 1.1rem;margin:.9rem 0;
+}
+.prompt-text,.prompt pre,.prompt code{
+  display:block;margin:0;white-space:pre-wrap;word-break:break-word;
+  color:var(--prompt-fg);font-family:var(--font-mono);font-size:.8rem;line-height:1.65;
+}
+.copy-btn{
+  position:absolute;top:.6rem;right:.6rem;
+  display:inline-flex;align-items:center;gap:.3rem;
+  background:transparent;color:var(--prompt-btn);
+  border:1px solid var(--prompt-line);border-radius:7px;
+  padding:.26rem .6rem;font-family:var(--font-body);font-size:.68rem;font-weight:600;
+  cursor:pointer;transition:color var(--t),border-color var(--t),background var(--t);
+}
+.copy-btn:hover{color:#fff;border-color:var(--prompt-line-2)}
+.copy-btn svg{width:13px;height:13px;stroke:currentColor}
+.copy-label{line-height:1}
+.copy-btn:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.copy-btn.is-copied{color:#fff;border-color:var(--em);background:rgba(15,81,50,.45)}
+.copy-btn.is-failed{color:#fff;border-color:#B4543A;background:rgba(180,84,58,.35)}
+
+/* ----------------------------------------------------------------------------
+   16. Biblioteca de prompts (grid de tarjetas)
+   -------------------------------------------------------------------------- */
+.prompt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1rem}
+.prompt-card{
+  display:flex;flex-direction:column;gap:.5rem;
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);
+  padding:1rem;
+}
+.prompt-card .prompt{margin:0}
+.prompt-src{font-size:.78rem;color:var(--em);font-weight:600}
+.prompt-src:hover{color:var(--em-deep)}
+
+/* Barra de filtro (prompts / buscar) */
+.filter-bar{
+  display:flex;align-items:center;gap:.6rem;
+  background:var(--surface);border:1px solid var(--line-2);border-radius:var(--r-lg);
+  padding:.7rem 1rem;margin:0 0 1rem;max-width:620px;
+  transition:border-color var(--t),box-shadow var(--t);
+}
+.filter-bar:focus-within{border-color:var(--em);box-shadow:0 0 0 3px var(--em-tint)}
+.filter-ico{display:flex;color:var(--muted);flex:none}
+.filter-ico svg{stroke:currentColor}
+.filter-bar input{
+  flex:1;min-width:0;border:none;outline:none;background:transparent;
+  font-family:var(--font-body);font-size:.96rem;color:var(--ink);
+}
+.filter-bar input::placeholder{color:var(--muted)}
+
+.result-count{font-size:.85rem;color:var(--muted);margin:.2rem 0 1.1rem}
+
+/* ----------------------------------------------------------------------------
+   17. Resultados de búsqueda (lista)
+   -------------------------------------------------------------------------- */
+.result-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.55rem}
+.result-row{
+  display:flex;align-items:center;gap:.7rem;
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);
+  padding:.9rem 1.1rem;text-decoration:none;color:inherit;
+  transition:border-color var(--t),box-shadow var(--t);
+}
+.result-row:hover{border-color:var(--line-2);box-shadow:var(--shadow-sm);text-decoration:none}
+.result-row:hover .mat-go{color:var(--em);transform:translateX(2px)}
+.result-main{display:flex;flex-direction:column;gap:.2rem;min-width:0;flex:1}
+.result-name{font-weight:600;color:var(--ink);font-size:.98rem}
+.result-prompt{font-weight:500;font-size:.9rem;color:var(--ink-soft)}
+.result-sub{font-size:.78rem;color:var(--muted)}
+.result-list mark,.result-name mark{background:var(--mark-bg);color:var(--ink);padding:0 .12em;border-radius:3px;font-weight:600}
+
+/* Estado vacío */
+.empty{
+  text-align:center;color:var(--muted);
+  padding:2.2rem 1rem;border:1px dashed var(--line-2);border-radius:var(--r-lg);
+  background:var(--surface);
+}
+
+/* ----------------------------------------------------------------------------
+   18. Vista del taller (secciones + quiz)
+   -------------------------------------------------------------------------- */
+.taller-sec{margin:0 0 2.2rem;scroll-margin-top:calc(var(--header-h) + 1rem)}
+.taller-sec h2{font-size:clamp(1.3rem,3vw,1.7rem);color:var(--ink);margin:0 0 .8rem;padding-bottom:.5rem;border-bottom:1px solid var(--line)}
+.taller-sec .prose{font-size:.96rem}
+
+/* Quiz de demostración */
+.quiz{
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);
+  padding:clamp(1.2rem,3vw,1.8rem);
+}
+.quiz-q{
+  border:1px solid var(--line);border-radius:var(--r-md);
+  padding:1rem 1.1rem;margin:0 0 1rem;
+  transition:border-color var(--t),background var(--t);
+}
+.quiz-q legend{font-weight:600;color:var(--ink);padding:0 .3rem;font-size:.98rem}
+.quiz-q.is-ok{border-color:var(--em);background:var(--em-tint)}
+.quiz-q.is-bad{border-color:#B4543A;background:rgba(180,84,58,.06)}
+.quiz-opts{display:flex;flex-direction:column;gap:.45rem;margin-top:.7rem}
+.quiz-opt{display:flex;align-items:flex-start;gap:.6rem;cursor:pointer;padding:.4rem .5rem;border-radius:var(--r-sm);transition:background var(--t)}
+.quiz-opt:hover{background:var(--paper)}
+.quiz-opt input{margin-top:.25rem;accent-color:var(--em);flex:none}
+.quiz-opt-txt{font-size:.92rem;color:var(--ink-soft)}
+.quiz-opt-txt b{color:var(--ink)}
+.quiz-fb{margin:.6rem 0 0;font-size:.84rem;color:var(--muted);font-weight:600}
+.quiz-actions{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin-top:.6rem}
+.quiz-score{margin:0;font-size:.9rem;color:var(--ink);font-weight:600}
+
+/* ----------------------------------------------------------------------------
+   19. Pie de página
+   -------------------------------------------------------------------------- */
+.site-footer{
+  border-top:1px solid var(--line);
+  padding:1.6rem clamp(1rem,4vw,3rem);margin-top:auto;
+  background:var(--paper);
+}
+.site-footer p{margin:0;max-width:var(--content-max);margin-inline:auto;font-size:.82rem;color:var(--muted);line-height:1.6}
+.site-footer i{color:var(--ink-soft);font-style:italic}
+
+/* ----------------------------------------------------------------------------
+   20. Responsive — sidebar off-canvas por debajo de 880px
+   -------------------------------------------------------------------------- */
+@media (min-width:1440px){
+  :root{--sidebar-w:312px;--content-max:1240px}
+}
+
+@media (max-width:1024px){
+  :root{--sidebar-w:248px}
+  .content{padding:clamp(1.2rem,3vw,2rem) clamp(1rem,3vw,2rem)}
+}
+
+/* < 880: sidebar colapsable (off-canvas) */
+@media (max-width:879.98px){
+  .side-toggle{display:inline-flex}
+
+  .layout{display:block}
+
+  .sidebar{
+    height:auto;max-height:none;overflow:visible;
+    position:static;top:auto;
+    border-right:none;border-bottom:1px solid var(--line);
+    padding:1rem clamp(1rem,4vw,1.6rem);
+  }
+  /* Lista de navegación oculta hasta abrir con el botón */
+  .sidebar .side-nav{display:none}
+  .sidebar.is-open .side-nav{display:block}
+
+  .content{padding:1.3rem clamp(1rem,4vw,1.6rem)}
+
+  .topnav{display:none}
+}
+
+@media (max-width:768px){
+  body{font-size:15px}
+  .area-grid{grid-template-columns:1fr}
+  .quick-grid{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+  .prompt-grid{grid-template-columns:1fr}
+  .stats{gap:1.4rem}
+  .topbar{gap:.6rem;padding:0 1rem}
+  .brand-text small{display:none}
+  .topsearch{max-width:none}
+}
+
+@media (max-width:375px){
+  .hero{padding:1.4rem 1.1rem}
+  .hero-title{font-size:1.7rem}
+  .quick-grid{grid-template-columns:1fr}
+  .stats b{font-size:1.6rem}
+}
+
+/* ----------------------------------------------------------------------------
+   21. Movimiento reducido (accesibilidad)
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.001ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.001ms !important;
+    scroll-behavior:auto !important;
+  }
+}
+
+/* ----------------------------------------------------------------------------
+   22. Impresión (sobria, sin elementos de navegación)
+   -------------------------------------------------------------------------- */
+@media print{
+  .topbar,.sidebar,.side-toggle,.copy-btn,.topnav,.hero-search,.filter-bar{display:none !important}
+  body{background:#fff}
+  .layout{display:block}
+  .content,.container{padding:0;max-width:none}
+  .prompt{background:#fff;border:1px solid var(--line-2)}
+  .prompt-text,.prompt pre,.prompt code{color:var(--ink)}
+  .subject,.hero,.area-card,.quick-card,.prompt-card{border-color:var(--line-2);box-shadow:none}
+}

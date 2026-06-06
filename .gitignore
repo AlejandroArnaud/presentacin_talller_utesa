@@ -18,3 +18,6 @@ build/
 
 # superpowers (companion de brainstorm, sesiones locales)
 .superpowers/
+
+# playwright-mcp (scratch de QA del portal, sesiones locales)
+.playwright-mcp/
